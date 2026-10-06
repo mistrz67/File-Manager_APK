@@ -10,12 +10,13 @@ import org.fossify.filemanager.network.core.LocalEndpoint
 import org.fossify.filemanager.network.core.MissingCredentialsException
 import org.fossify.filemanager.network.core.RemoteEndpoint
 import org.fossify.filemanager.network.core.RemoteNotFoundException
+import org.fossify.filemanager.network.core.SecretCipher
 import org.fossify.filemanager.network.core.RemotePath
 import org.fossify.filemanager.network.core.TransferEngine
 
 /** Process wide access to the saved drives, the connection pool and the transfer engine. */
-class NetworkManager private constructor(context: Context) {
-    val repository = ConnectionRepository(context, KeySecretCipher { KeystoreKey.getOrNull() })
+class NetworkManager private constructor(context: Context, cipher: SecretCipher) {
+    val repository = ConnectionRepository(context, cipher)
     val pool = ClientPool()
     val engine = TransferEngine()
     val files = RemoteFiles(context.applicationContext, this)
@@ -52,7 +53,15 @@ class NetworkManager private constructor(context: Context) {
 
         fun get(context: Context): NetworkManager {
             return instance ?: synchronized(this) {
-                instance ?: NetworkManager(context.applicationContext).also { instance = it }
+                instance ?: NetworkManager(context.applicationContext, KeySecretCipher { KeystoreKey.getOrNull() }).also { instance = it }
+            }
+        }
+
+        /** Replaces the process wide instance; tests use it to avoid the Android Keystore. */
+        fun installForTesting(context: Context, cipher: SecretCipher): NetworkManager {
+            return synchronized(this) {
+                instance?.pool?.close()
+                NetworkManager(context.applicationContext, cipher).also { instance = it }
             }
         }
     }

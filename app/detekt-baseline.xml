@@ -7,77 +7,143 @@
     <ID>ComplexCondition:ItemsAdapter.kt$ItemsAdapter$hasOTGConnected &amp;&amp; itemToLoad is String &amp;&amp; activity.isPathOnOTG(itemToLoad) &amp;&amp; baseConfig.OTGTreeUri.isNotEmpty() &amp;&amp; baseConfig.OTGPartition.isNotEmpty()</ID>
     <ID>ComplexCondition:MainActivity.kt$MainActivity$!config.wasOTGHandled &amp;&amp; hasPermission(PERMISSION_WRITE_STORAGE) &amp;&amp; hasOTGConnected() &amp;&amp; config.OTGPath.isEmpty()</ID>
     <ID>ComplexCondition:MimeTypesActivity.kt$MimeTypesActivity$mimetype != "image" &amp;&amp; mimetype != "video" &amp;&amp; mimetype != "audio" &amp;&amp; mimetype != "text" &amp;&amp; !extraAudioMimeTypes.contains(fullMimetype) &amp;&amp; !extraDocumentMimeTypes.contains(fullMimetype) &amp;&amp; !archiveMimeTypes.contains(fullMimetype)</ID>
+    <ID>ComplexCondition:MyViewPagerFragment.kt$MyViewPagerFragment$RemotePath.isRemote(path) &amp;&amp; (isGetContentIntent || isCreateDocumentIntent || isGetRingtonePicker)</ID>
     <ID>ComplexCondition:ReadTextActivity.kt$ReadTextActivity$requestCode == SELECT_SAVE_FILE_INTENT &amp;&amp; resultCode == Activity.RESULT_OK &amp;&amp; resultData != null &amp;&amp; resultData.data != null</ID>
+    <ID>ComplexCondition:RemoteActions.kt$RemoteActions$openAsType == OPEN_AS_TEXT || (openAsType == OPEN_AS_DEFAULT &amp;&amp; !forceChooser &amp;&amp; isText)</ID>
+    <ID>ComplexCondition:SftpRemoteClient.kt$SftpRemoteClient$it == '\\' || it == '*' || it == '?' || it == '[' || it == ']'</ID>
+    <ID>ComplexCondition:TransferEngine.kt$TransferEngine$job.mode == TransferMode.MOVE &amp;&amp; sameEndpoint &amp;&amp; isTopLevelNode &amp;&amp; tryRename(leases, node)</ID>
     <ID>CyclomaticComplexMethod:DecompressActivity.kt$DecompressActivity$private fun decompressTo(destination: String)</ID>
+    <ID>CyclomaticComplexMethod:EditNetworkDriveActivity.kt$EditNetworkDriveActivity$private fun buildConnection(): NetworkConnection?</ID>
+    <ID>CyclomaticComplexMethod:FtpRemoteClient.kt$FtpRemoteClient$private fun mapReply(client: FTPClient, path: String): IOException</ID>
     <ID>CyclomaticComplexMethod:ItemsAdapter.kt$ItemsAdapter$@SuppressLint("NewApi") private fun compressPaths( sourcePaths: List&lt;String&gt;, targetPath: String, password: String? = null ): Boolean</ID>
     <ID>CyclomaticComplexMethod:ItemsAdapter.kt$ItemsAdapter$override fun actionItemPressed(id: Int)</ID>
+    <ID>CyclomaticComplexMethod:ItemsAdapter.kt$ItemsAdapter$private fun setupView(binding: ItemViewBinding, listItem: ListItem)</ID>
+    <ID>CyclomaticComplexMethod:ItemsFragment.kt$ItemsFragment$override fun searchQueryChanged(text: String)</ID>
+    <ID>CyclomaticComplexMethod:MainActivity.kt$MainActivity$fun refreshMenuItems()</ID>
     <ID>CyclomaticComplexMethod:MainActivity.kt$MainActivity$private fun setupOptionsMenu()</ID>
     <ID>CyclomaticComplexMethod:MimeTypesActivity.kt$MimeTypesActivity$private fun getProperFileDirItems(callback: (ArrayList&lt;FileDirItem&gt;) -&gt; Unit)</ID>
+    <ID>CyclomaticComplexMethod:SessionResumingFtpsClient.kt$SessionResumingFtpsClient$override fun _openDataConnection_(command: String?, arg: String?): Socket?</ID>
+    <ID>CyclomaticComplexMethod:SftpRemoteClient.kt$SftpRemoteClient$private fun mapConnectException(e: Exception): IOException</ID>
+    <ID>CyclomaticComplexMethod:SmbRemoteClient.kt$SmbRemoteClient$private fun mapException(e: Exception, path: String): IOException</ID>
     <ID>CyclomaticComplexMethod:StorageFragment.kt$StorageFragment$private fun getSizesByMimeType(volumeName: String): HashMap&lt;String, Long&gt;</ID>
+    <ID>CyclomaticComplexMethod:TransferEngine.kt$TransferEngine$fun run(job: TransferJob, token: CancellationToken = CancellationToken(), listener: TransferListener = object : TransferListener {}): TransferResult</ID>
+    <ID>EmptyCatchBlock:FtpFileSystemTest.kt$FtpAuthenticationTest${ }</ID>
     <ID>EmptyCatchBlock:MimeTypesActivity.kt$MimeTypesActivity${ }</ID>
+    <ID>EmptyCatchBlock:SftpFileSystemTest.kt$SftpHostKeyTest${ }</ID>
     <ID>EmptyCatchBlock:StorageFragment.kt$StorageFragment${ }</ID>
     <ID>EmptyFunctionBlock:DecompressItemsAdapter.kt$DecompressItemsAdapter${}</ID>
     <ID>EmptyFunctionBlock:MainActivity.kt$MainActivity.&lt;no name provided&gt;${}</ID>
     <ID>EmptyFunctionBlock:ManageFavoritesAdapter.kt$ManageFavoritesAdapter${}</ID>
     <ID>EmptyFunctionBlock:MimeTypesActivity.kt$MimeTypesActivity${}</ID>
+    <ID>EmptyFunctionBlock:NetworkDiscovery.kt$NetworkDiscovery.&lt;no name provided&gt;${}</ID>
+    <ID>EmptyFunctionBlock:SftpRemoteClient.kt$SftpRemoteClient.CredentialsUserInfo${}</ID>
+    <ID>EmptyFunctionBlock:SftpRemoteClient.kt$SftpRemoteClient.PinnedHostKeyRepository${}</ID>
     <ID>EmptyFunctionBlock:StorageFragment.kt$StorageFragment${}</ID>
+    <ID>EmptyFunctionBlock:TransferModels.kt$LocalEndpoint.&lt;no name provided&gt;${}</ID>
     <ID>LargeClass:ItemsAdapter.kt$ItemsAdapter : MyRecyclerViewAdapterOnPopupTextUpdate</ID>
+    <ID>LargeClass:MainActivity.kt$MainActivity : SimpleActivity</ID>
+    <ID>LoopWithTooManyJumpStatements:ClientPool.kt$ClientPool$while</ID>
     <ID>LoopWithTooManyJumpStatements:DecompressActivity.kt$DecompressActivity$while</ID>
     <ID>LoopWithTooManyJumpStatements:StorageFragment.kt$StorageFragment$do</ID>
+    <ID>LoopWithTooManyJumpStatements:TransferEngine.kt$TransferEngine$for</ID>
+    <ID>MagicNumber:ClientPool.kt$ClientPool.Companion$3</ID>
+    <ID>MagicNumber:ClientPool.kt$ClientPool.Companion$4</ID>
     <ID>MagicNumber:Config.kt$Config$1.2f</ID>
     <ID>MagicNumber:Config.kt$Config$4</ID>
     <ID>MagicNumber:Config.kt$Config$8</ID>
     <ID>MagicNumber:DecompressActivity.kt$DecompressActivity$1024</ID>
     <ID>MagicNumber:DecompressItemsAdapter.kt$DecompressItemsAdapter$0.8f</ID>
     <ID>MagicNumber:DecompressItemsAdapter.kt$DecompressItemsAdapter$180</ID>
+    <ID>MagicNumber:DestinationPicker.kt$DestinationPicker$2</ID>
+    <ID>MagicNumber:EditNetworkDriveActivity.kt$EditNetworkDriveActivity$0.5f</ID>
+    <ID>MagicNumber:EditNetworkDriveActivity.kt$EditNetworkDriveActivity$65535</ID>
+    <ID>MagicNumber:FtpRemoteClient.kt$FtpRemoteClient$10</ID>
     <ID>MagicNumber:ItemsAdapter.kt$ItemsAdapter$0.8f</ID>
     <ID>MagicNumber:ItemsAdapter.kt$ItemsAdapter$10</ID>
     <ID>MagicNumber:ItemsAdapter.kt$ItemsAdapter$180</ID>
     <ID>MagicNumber:ItemsAdapter.kt$ItemsAdapter$4</ID>
     <ID>MagicNumber:ItemsFragment.kt$ItemsFragment$3</ID>
+    <ID>MagicNumber:KeystoreKey.kt$KeystoreKey$256</ID>
+    <ID>MagicNumber:NetworkDiscovery.kt$NetworkDiscovery.&lt;no name provided&gt;$100</ID>
+    <ID>MagicNumber:NetworkDiscovery.kt$NetworkDiscovery.&lt;no name provided&gt;$8</ID>
+    <ID>MagicNumber:PinnedIdentity.kt$PinnedIdentity.Companion$0xff</ID>
+    <ID>MagicNumber:PinnedIdentity.kt$PinnedIdentity.Companion$16</ID>
+    <ID>MagicNumber:PinnedIdentity.kt$PinnedIdentity.Companion$24</ID>
+    <ID>MagicNumber:PinnedIdentity.kt$PinnedIdentity.Companion$3</ID>
+    <ID>MagicNumber:PinnedIdentity.kt$PinnedIdentity.Companion$4</ID>
+    <ID>MagicNumber:PinnedIdentity.kt$PinnedIdentity.Companion$8</ID>
     <ID>MagicNumber:ReadTextActivity.kt$ReadTextActivity$250</ID>
     <ID>MagicNumber:ReadTextActivity.kt$ReadTextActivity$50</ID>
     <ID>MagicNumber:RecentsFragment.kt$RecentsFragment$3</ID>
     <ID>MagicNumber:RecentsFragment.kt$RecentsFragment$50</ID>
+    <ID>MagicNumber:RemoteCache.kt$RemoteCache$8</ID>
+    <ID>MagicNumber:RemoteFiles.kt$RemoteFiles$2_000</ID>
     <ID>MagicNumber:RootHelpers.kt$RootHelpers.&lt;no name provided&gt;$5</ID>
+    <ID>MagicNumber:SecretBox.kt$SecretBox$3</ID>
+    <ID>MagicNumber:SftpRemoteClient.kt$SftpRemoteClient$3</ID>
+    <ID>MagicNumber:SftpRemoteClient.kt$SftpRemoteClient$30_000</ID>
+    <ID>MagicNumber:SftpRemoteClient.kt$SftpRemoteClient$4</ID>
     <ID>MagicNumber:StorageFragment.kt$StorageFragment$100000</ID>
     <ID>MagicNumber:StorageFragment.kt$StorageFragment$2000</ID>
     <ID>MagicNumber:StorageFragment.kt$StorageFragment$3</ID>
     <ID>MagicNumber:StorageFragment.kt$StorageFragment$4096L</ID>
+    <ID>MagicNumber:SubnetScanner.kt$SubnetScanner$800</ID>
+    <ID>MagicNumber:SubnetScanner.kt$SubnetScanner.Companion$0xff</ID>
+    <ID>MagicNumber:SubnetScanner.kt$SubnetScanner.Companion$16</ID>
+    <ID>MagicNumber:SubnetScanner.kt$SubnetScanner.Companion$24</ID>
+    <ID>MagicNumber:SubnetScanner.kt$SubnetScanner.Companion$3</ID>
+    <ID>MagicNumber:SubnetScanner.kt$SubnetScanner.Companion$30</ID>
+    <ID>MagicNumber:SubnetScanner.kt$SubnetScanner.Companion$32</ID>
+    <ID>MagicNumber:SubnetScanner.kt$SubnetScanner.Companion$8</ID>
+    <ID>MagicNumber:TransferNotifications.kt$TransferNotifications$100</ID>
     <ID>MaxLineLength:Activity.kt$fun</ID>
     <ID>MaxLineLength:ChangeViewTypeDialog.kt$ChangeViewTypeDialog$class</ID>
     <ID>MaxLineLength:ChangeViewTypeDialog.kt$ChangeViewTypeDialog$val</ID>
+    <ID>MaxLineLength:ClientPool.kt$ClientPool$if (remaining &lt;= 0) throw ConnectionFailedException("Too many open connections to ${config.connection.host}")</ID>
+    <ID>MaxLineLength:ClientPool.kt$ClientPool$}</ID>
     <ID>MaxLineLength:CompressAsDialog.kt$CompressAsDialog$FilePickerDialog</ID>
     <ID>MaxLineLength:CompressAsDialog.kt$CompressAsDialog$class</ID>
     <ID>MaxLineLength:CompressAsDialog.kt$CompressAsDialog$val indexOfDot = if (filename.contains('.') &amp;&amp; !activity.getIsPathDirectory(path)) filename.lastIndexOf(".") else filename.length</ID>
     <ID>MaxLineLength:Config.kt$Config$set(wasStorageAnalysisTabAdded) = prefs.edit().putBoolean(WAS_STORAGE_ANALYSIS_TAB_ADDED, wasStorageAnalysisTabAdded).apply()</ID>
-    <ID>MaxLineLength:Context.kt$fun Context.isPathOnRoot(path: String)</ID>
     <ID>MaxLineLength:DecompressItemsAdapter.kt$DecompressItemsAdapter$class</ID>
     <ID>MaxLineLength:DecompressItemsAdapter.kt$DecompressItemsAdapter$val drawable = fileDrawables.getOrElse(fileName.substringAfterLast(".").lowercase(Locale.getDefault()), { fileDrawable })</ID>
+    <ID>MaxLineLength:DestinationPicker.kt$DestinationPicker$/** True when the plain folder picker of the app cannot be used: the source is remote or a drive could be the target. */</ID>
+    <ID>MaxLineLength:DiscoverServersDialog.kt$DiscoverServersDialog$activity.setupDialogStuff(binding.root, this, titleId = R.string.drive_scan_network) { alert -&gt; dialog = alert }</ID>
+    <ID>MaxLineLength:DiscoverServersDialog.kt$DiscoverServersDialog.ServerAdapter$discoveredServerDetails.text = "${server.address} · ${server.protocols.sortedBy { it.ordinal }.joinToString(", ") { protocolLabel(it) }}"</ID>
+    <ID>MaxLineLength:EditNetworkDriveActivity.kt$EditNetworkDriveActivity$binding.editDriveToolbar.title = getString(if (existing == null) R.string.add_network_drive else R.string.edit_network_drive)</ID>
+    <ID>MaxLineLength:EditNetworkDriveActivity.kt$EditNetworkDriveActivity$trustedIdentity = if (identityChanged) trustedIdentity.takeIf { it != old?.trustedIdentity }.orEmpty() else trustedIdentity</ID>
+    <ID>MaxLineLength:EditNetworkDriveActivity.kt$EditNetworkDriveActivity$val bytes = contentResolver.openInputStream(uri)?.use { it.readNBytes(MAX_KEY_BYTES + 1) } ?: ByteArray(0)</ID>
+    <ID>MaxLineLength:EditNetworkDriveActivity.kt$EditNetworkDriveActivity$val identityChanged = old != null &amp;&amp; (old.protocol != protocol || old.host != host || old.effectivePort != (if (port &gt; 0) port else protocol.defaultPort))</ID>
     <ID>MaxLineLength:FavoritesActivity.kt$FavoritesActivity$FilePickerDialog</ID>
     <ID>MaxLineLength:FavoritesActivity.kt$FavoritesActivity$ManageFavoritesAdapter(this@FavoritesActivity, favorites, this@FavoritesActivity, manageFavoritesList) { }</ID>
+    <ID>MaxLineLength:FileSystem.kt$fun</ID>
+    <ID>MaxLineLength:FtpRemoteClient.kt$FtpRemoteClient$return runCatching { ftp?.printWorkingDirectory() }.getOrNull()?.takeIf { it.isNotEmpty() }?.let { Paths.normalize(it) } ?: "/"</ID>
     <ID>MaxLineLength:ItemsAdapter.kt$ItemsAdapter$}</ID>
+    <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$/** Searching a network drive recursively would mean listing every folder over the network; search the open folder only. */</ID>
+    <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$ArrayList(listed.filter { item -&gt; wantedMimeTypes.any { isProperMimeType(it, item.mPath, item.mIsDirectory) } })</ID>
     <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$ItemsAdapter</ID>
     <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$class</ID>
     <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$context</ID>
     <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$if</ID>
     <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$private</ID>
+    <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$val canUseDrives = !(isGetContentIntent || isCreateDocumentIntent || isGetRingtonePicker || isPickMultipleIntent)</ID>
     <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$val sectionTitle = ListItem(it.path, context!!.humanizePath(it.path), true, 0, 0, 0, true, false)</ID>
     <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment$val sectionTitle = ListItem(parent, context!!.humanizePath(parent), false, 0, 0, 0, true, false)</ID>
     <ID>MaxLineLength:ItemsFragment.kt$ItemsFragment.&lt;no name provided&gt;$return</ID>
     <ID>MaxLineLength:ListItem.kt$ListItem$val mPath: String</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$// used at apps that have no file access at all, but need to work with files. For example Simple Calendar uses this at exporting events into a file</ID>
-    <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.add_favorite).isVisible = currentFragment is ItemsFragment &amp;&amp; !favorites.contains(currentFragment.currentPath)</ID>
+    <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.add_favorite).isVisible = currentFragment is ItemsFragment &amp;&amp; !isRemote &amp;&amp; !favorites.contains(currentFragment.currentPath)</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.column_count).isVisible = currentViewType == VIEW_TYPE_GRID &amp;&amp; currentFragment !is StorageFragment</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.go_home).isVisible = currentFragment is ItemsFragment &amp;&amp; currentFragment.currentPath != config.homeFolder</ID>
-    <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.remove_favorite).isVisible = currentFragment is ItemsFragment &amp;&amp; favorites.contains(currentFragment.currentPath)</ID>
-    <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.set_as_home).isVisible = currentFragment is ItemsFragment &amp;&amp; currentFragment.currentPath != config.homeFolder</ID>
+    <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.remove_favorite).isVisible = currentFragment is ItemsFragment &amp;&amp; !isRemote &amp;&amp; favorites.contains(currentFragment.currentPath)</ID>
+    <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.set_as_home).isVisible = currentFragment is ItemsFragment &amp;&amp; !isRemote &amp;&amp; currentFragment.currentPath != config.homeFolder</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.stop_showing_hidden).isVisible = config.temporarilyShowHidden &amp;&amp; currentFragment !is StorageFragment</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.temporarily_show_hidden).isVisible = !config.shouldShowHidden() &amp;&amp; currentFragment !is StorageFragment</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$findItem(R.id.toggle_filename).isVisible = currentViewType == VIEW_TYPE_GRID &amp;&amp; currentFragment !is StorageFragment</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$getStorageDirectories().firstOrNull { it.trimEnd('/') != internalStoragePath &amp;&amp; it.trimEnd('/') != sdCardPath }</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$if</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$private fun getInactiveTabIndexes(activeIndex: Int)</ID>
+    <ID>MaxLineLength:MainActivity.kt$MainActivity$result.failures.isNotEmpty() -&gt; toast(NetworkErrors.describe(this, result.failures.first().error), android.widget.Toast.LENGTH_LONG)</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$resultIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION</ID>
     <ID>MaxLineLength:MainActivity.kt$MainActivity$val licenses = LICENSE_GLIDE or LICENSE_PATTERN or LICENSE_REPRINT or LICENSE_GESTURE_VIEWS or LICENSE_AUTOFITTEXTVIEW or LICENSE_ZIP4J</ID>
     <ID>MaxLineLength:MimeTypesActivity.kt$MimeTypesActivity$!extraAudioMimeTypes.contains(fullMimetype)</ID>
@@ -85,17 +151,79 @@
     <ID>MaxLineLength:MimeTypesActivity.kt$MimeTypesActivity$val fullMimetype = cursor.getStringValue(MediaStore.Files.FileColumns.MIME_TYPE)?.lowercase(Locale.getDefault()) ?: return@queryCursor</ID>
     <ID>MaxLineLength:MyViewPagerFragment.kt$MyViewPagerFragment$abstract</ID>
     <ID>MaxLineLength:MyViewPagerFragment.kt$MyViewPagerFragment$val fabIcon = context.resources.getColoredDrawableWithColor(iconId, context.getProperPrimaryColor().getContrastColor())</ID>
+    <ID>MaxLineLength:NetworkConnection.kt$ConnectionConfig$data</ID>
+    <ID>MaxLineLength:NetworkErrors.kt$NetworkErrors$PasswordPromptDialog</ID>
+    <ID>MaxLineLength:NetworkErrors.kt$NetworkErrors$is RemoteAccessDeniedException -&gt; context.getString(R.string.network_error_access_denied, displayName(error.path))</ID>
+    <ID>MaxLineLength:NetworkManager.kt$NetworkManager$val connection = repository.get(connectionId) ?: throw RemoteNotFoundException(RemotePath.build(connectionId, "/"))</ID>
+    <ID>MaxLineLength:NetworkManager.kt$NetworkManager.Companion$instance ?: NetworkManager(context.applicationContext, KeySecretCipher { KeystoreKey.getOrNull() }).also { instance = it }</ID>
+    <ID>MaxLineLength:NetworkPaths.kt$NetworkPaths$val</ID>
+    <ID>MaxLineLength:PasswordPromptDialog.kt$PasswordPromptDialog$binding.passwordPromptMessage.text = activity.getString(if (wrong) R.string.password_wrong else R.string.password_required, driveName)</ID>
+    <ID>MaxLineLength:PinningTrustManager.kt$PinningTrustManager$throw UntrustedServerCertificateException(UntrustedServerException(host, presented.serialize(), pinned?.serialize()))</ID>
+    <ID>MaxLineLength:PinningTrustManager.kt$PinningTrustManager$verify(chain) { delegate?.checkServerTrusted(chain, authType) ?: throw CertificateException("No system trust manager") }</ID>
+    <ID>MaxLineLength:PinningTrustManager.kt$PinningTrustManager$verify(chain) { delegate?.checkServerTrusted(chain, authType, engine) ?: throw CertificateException("No system trust manager") }</ID>
+    <ID>MaxLineLength:PinningTrustManager.kt$PinningTrustManager$verify(chain) { delegate?.checkServerTrusted(chain, authType, socket) ?: throw CertificateException("No system trust manager") }</ID>
+    <ID>MaxLineLength:PinningTrustManager.kt$PinningTrustManager.Companion$?:</ID>
     <ID>MaxLineLength:ReadTextActivity.kt$ReadTextActivity$if</ID>
     <ID>MaxLineLength:ReadTextActivity.kt$ReadTextActivity$private</ID>
     <ID>MaxLineLength:RecentsFragment.kt$RecentsFragment$ItemsAdapter</ID>
     <ID>MaxLineLength:RecentsFragment.kt$RecentsFragment$binding.recentsSwipeRefresh.isEnabled = lastSearchedText.isEmpty() &amp;&amp; activity?.config?.enablePullToRefresh != false</ID>
     <ID>MaxLineLength:RecentsFragment.kt$RecentsFragment$class</ID>
     <ID>MaxLineLength:RecentsFragment.kt$RecentsFragment$if</ID>
+    <ID>MaxLineLength:RemoteActions.kt$RemoteActions$NetworkErrors.handle(activity, RemotePath.connectionId(destination) ?: RemotePath.connectionId(items.first().path), e)</ID>
+    <ID>MaxLineLength:RemoteActions.kt$RemoteActions$fun</ID>
+    <ID>MaxLineLength:RemoteActions.kt$RemoteActions$if (!finished) dialog = TransferProgressDialog(activity, activity.getString(R.string.network_opening_file, RemotePath.name(paths.first()))) { token.cancel() }</ID>
+    <ID>MaxLineLength:RemoteActions.kt$RemoteActions$if (e !is OperationCancelledException) NetworkErrors.handle(activity, RemotePath.connectionId(paths.first()), e)</ID>
+    <ID>MaxLineLength:RemoteActions.kt$RemoteActions$val sourceParent = items.first().path.let { if (RemotePath.isRemote(it)) RemotePath.parent(it) else File(it).parent }</ID>
+    <ID>MaxLineLength:RemoteBreadcrumbs.kt$RemoteBreadcrumbs$setDrawablesRelativeWithIntrinsicBounds(start = AppCompatResources.getDrawable(context, CommonsR.drawable.ic_chevron_right_vector))</ID>
+    <ID>MaxLineLength:RemoteCache.kt$RemoteCache$fun</ID>
+    <ID>MaxLineLength:RemoteCreateNewItemDialog.kt$RemoteCreateNewItemDialog$val isFolder = binding.dialogRadioGroup.checkedRadioButtonId == R.id.dialog_radio_directory</ID>
+    <ID>MaxLineLength:RemoteExceptions.kt$RemoteAccessDeniedException : RemoteException</ID>
+    <ID>MaxLineLength:RemoteExceptions.kt$RemoteAlreadyExistsException : RemoteException</ID>
+    <ID>MaxLineLength:RemoteExceptions.kt$RemoteNotEmptyException : RemoteException</ID>
+    <ID>MaxLineLength:RemoteFiles.kt$RemoteFiles$fun</ID>
+    <ID>MaxLineLength:RemoteFiles.kt$RemoteFiles$fun list(path: String): List&lt;RemoteEntry&gt;</ID>
+    <ID>MaxLineLength:RemoteFiles.kt$RemoteFiles$result.failures.firstOrNull()?.let { throw (it.error as? IOException) ?: RemoteException(it.error.message, it.error) }</ID>
+    <ID>MaxLineLength:RemoteFiles.kt$RemoteFiles$return file.isFile &amp;&amp; entry.modified &gt; 0 &amp;&amp; file.length() == entry.size &amp;&amp; abs(file.lastModified() - entry.modified) &lt; 2_000</ID>
+    <ID>MaxLineLength:RemoteFiles.kt$RemoteFiles$return manager.engine.measure(manager.remoteEndpoint(connectionId), paths.map { RemotePath.innerPath(it) }, token)</ID>
+    <ID>MaxLineLength:RemoteFolderPickerDialog.kt$RemoteFolderPickerDialog$/** Lets the user pick a folder on a network drive. [startPath] is a `remote://` path, or null for the drive's default folder. */</ID>
+    <ID>MaxLineLength:RemotePropertiesDialog.kt$RemotePropertiesDialog$binding.propertiesLocation.text = NetworkPaths.label(activity, RemotePath.parent(paths.first()) ?: paths.first())</ID>
+    <ID>MaxLineLength:RemotePropertiesDialog.kt$RemotePropertiesDialog$binding.propertiesName.text = single?.name ?: activity.resources.getQuantityString(R.plurals.items, items.size, items.size)</ID>
     <ID>MaxLineLength:RootHelpers.kt$RootHelpers$fun</ID>
     <ID>MaxLineLength:RootHelpers.kt$RootHelpers$private</ID>
     <ID>MaxLineLength:SaveAsActivity.kt$SaveAsActivity$FilePickerDialog</ID>
     <ID>MaxLineLength:SaveAsDialog.kt$SaveAsDialog$val title = String.format(activity.getString(R.string.file_already_exists_overwrite), newFilename)</ID>
+    <ID>MaxLineLength:SessionResumingFtpsClient.kt$SessionResumingFtpsClient$if</ID>
+    <ID>MaxLineLength:SessionResumingFtpsClient.kt$SessionResumingFtpsClient$val secure = sslContext.socketFactory.createSocket(ControlPortSocket(plain, controlPort), controlHost, controlPort, true) as SSLSocket</ID>
     <ID>MaxLineLength:SettingsActivity.kt$SettingsActivity$settingsUseEnglishHolder.beVisibleIf((config.wasUseEnglishToggled || Locale.getDefault().language != "en") &amp;&amp; !isTiramisuPlus())</ID>
+    <ID>MaxLineLength:SftpRemoteClient.kt$SftpRemoteClient$private</ID>
+    <ID>MaxLineLength:SftpRemoteClient.kt$SftpRemoteClient$rootCause is SocketException || rootCause is java.net.SocketTimeoutException || message.contains("timeout", true)</ID>
+    <ID>MaxLineLength:SftpRemoteClient.kt$SftpRemoteClient$toEntry(sftp, Paths.parent(normalized) ?: "/", Paths.name(normalized), sftp.stat(escape(normalized)), isStatResult = true)</ID>
+    <ID>MaxLineLength:SftpRemoteClient.kt$SftpRemoteClient$val newSession = jsch.getSession(connection.username.ifEmpty { "anonymous" }, connection.host, connection.effectivePort)</ID>
+    <ID>MaxLineLength:SmbRemoteClient.kt$SmbRemoteClient$.</ID>
+    <ID>MaxLineLength:StoragePickerWithDrives.kt$StoragePickerWithDrives$RemotePath.isRemote(currentPath) -&gt; connections.indexOfFirst { it.id == RemotePath.connectionId(currentPath) }</ID>
+    <ID>MaxLineLength:SubnetScanner.kt$SubnetScanner$val executor = Executors.newSingleThreadExecutor { Thread(it, "network-drive-dns").apply { isDaemon = true } }</ID>
+    <ID>MaxLineLength:SubnetScanner.kt$SubnetScanner$val name = executor.submit&lt;String?&gt; { InetAddress.getByName(address).canonicalHostName }.get(800, TimeUnit.MILLISECONDS)</ID>
+    <ID>MaxLineLength:SubnetScanner.kt$SubnetScanner.Companion$"${(candidate ushr 24) and 0xff}.${(candidate ushr 16) and 0xff}.${(candidate ushr 8) and 0xff}.${candidate and 0xff}"</ID>
+    <ID>MaxLineLength:TransferEngine.kt$TransferEngine$fun</ID>
+    <ID>MaxLineLength:TransferEngine.kt$TransferEngine$if</ID>
+    <ID>MaxLineLength:TransferEngine.kt$TransferEngine$private</ID>
+    <ID>MaxLineLength:TransferEngine.kt$TransferEngine$progress.skipBytes(nodes.filter { it.topLevel == node.topLevel }.sumOf { if (it.isDirectory) 0L else it.size }, files)</ID>
+    <ID>MaxLineLength:TransferEngine.kt$TransferEngine$scan(fs, child, Paths.join(targetPath, child.name), topLevel, nodes, token, listener, scannedFiles, depth + 1)</ID>
+    <ID>MaxLineLength:TransferEngine.kt$TransferEngine$scan(leases.sourceFs, entry, Paths.join(job.destinationDir, targetName), index, nodes, token, listener, scannedFiles, depth = 0)</ID>
+    <ID>MaxLineLength:TransferEngine.kt$TransferEngine.Leases$val destinationFs: FileSystem get() = (destinationLease ?: destination.acquire().also { destinationLease = it }).fs</ID>
+    <ID>MaxLineLength:TransferNotifications.kt$TransferNotifications$context</ID>
+    <ID>MaxLineLength:TransferNotifications.kt$TransferNotifications$context.getString(R.string.transfer_failed_text, result.failures.size, result.failures.first().error.message.orEmpty())</ID>
+    <ID>MaxLineLength:TransferNotifications.kt$TransferNotifications$if (request.kind == TransferRequest.Kind.DELETE) R.string.transfer_deleted_text else R.string.transfer_done_text</ID>
+    <ID>MaxLineLength:TransferNotifications.kt$TransferNotifications$return if (result.skipped &gt; 0) "$done · ${context.getString(R.string.transfer_skipped_text, result.skipped)}" else done</ID>
+    <ID>MaxLineLength:TransferNotifications.kt$TransferNotifications$val channel = NotificationChannel(CHANNEL_ID, context.getString(R.string.transfer_channel_name), NotificationManager.IMPORTANCE_LOW)</ID>
+    <ID>MaxLineLength:TransferProgressDialog.kt$TransferProgressDialog$binding.transferProgressBar.progress = (progress.bytesDone * PERCENT_STEPS / progress.bytesTotal).toInt()</ID>
+    <ID>MaxLineLength:TransferProgressDialog.kt$TransferProgressDialog$binding.transferProgressDetails.text = "${progress.bytesDone.formatSize()} / ${progress.bytesTotal.formatSize()}"</ID>
+    <ID>MaxLineLength:TransferService.kt$TransferService$ServiceCompat.startForeground(this, TransferNotifications.ONGOING_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)</ID>
+    <ID>MaxLineLength:TransferService.kt$TransferService$TransferResult(0, 0, listOf(TransferFailure(request.sources.firstOrNull().orEmpty(), if (e is RemoteException) e else RemoteException(e.message, e))), cancelled = false, bytes = 0)</ID>
+    <ID>MaxLineLength:TransferService.kt$TransferService$manager.engine.delete(manager.endpointFor(request.sources.first()), request.sources.map { innerPath(it) }, token, listener)</ID>
+    <ID>MaxLineLength:TransferService.kt$TransferService.&lt;no name provided&gt;$throttled { notifications.update(notifications.progress(title, getString(R.string.transfer_scanning, filesFound), -1)) }</ID>
+    <ID>MaxLineLength:TrustServerDialog.kt$TrustServerDialog$binding.trustFingerprintLabel.text = activity.getString(if (isTls) R.string.trust_server_fingerprint_tls else R.string.trust_server_fingerprint_ssh)</ID>
+    <ID>MaxLineLength:TrustServerDialog.kt$TrustServerDialog$binding.trustPrevious.text = PinnedIdentity.parse(error.previousIdentity)?.fingerprint ?: error.previousIdentity</ID>
     <ID>NestedBlockDepth:DecompressActivity.kt$DecompressActivity$private fun decompressTo(destination: String)</ID>
     <ID>NestedBlockDepth:ItemsAdapter.kt$ItemsAdapter$@SuppressLint("NewApi") private fun compressPaths( sourcePaths: List&lt;String&gt;, targetPath: String, password: String? = null ): Boolean</ID>
     <ID>NestedBlockDepth:ItemsAdapter.kt$ItemsAdapter$private fun decompressPaths( paths: List&lt;String&gt;, conflictResolutions: LinkedHashMap&lt;String, Int&gt;, callback: (success: Boolean) -&gt; Unit )</ID>
@@ -106,13 +234,25 @@
     <ID>NestedBlockDepth:RecentsFragment.kt$RecentsFragment$private fun getRecents(callback: (recents: ArrayList&lt;ListItem&gt;) -&gt; Unit)</ID>
     <ID>NestedBlockDepth:StorageFragment.kt$StorageFragment$override fun setupFragment(activity: SimpleActivity)</ID>
     <ID>NestedBlockDepth:StorageFragment.kt$StorageFragment$private fun getAllFiles(volumeName: String): ArrayList&lt;FileDirItem&gt;</ID>
+    <ID>NestedBlockDepth:TransferEngine.kt$TransferEngine$fun delete( endpoint: Endpoint, paths: List&lt;String&gt;, token: CancellationToken = CancellationToken(), listener: TransferListener = object : TransferListener {}, ): TransferResult</ID>
+    <ID>NestedBlockDepth:TransferEngine.kt$TransferEngine$fun measure(endpoint: Endpoint, paths: List&lt;String&gt;, token: CancellationToken = CancellationToken()): Pair&lt;Long, Int&gt;</ID>
+    <ID>NestedBlockDepth:TransferEngine.kt$TransferEngine$fun run(job: TransferJob, token: CancellationToken = CancellationToken(), listener: TransferListener = object : TransferListener {}): TransferResult</ID>
     <ID>ReturnCount:MainActivity.kt$MainActivity$override fun onBackPressedCompat(): Boolean</ID>
+    <ID>SwallowedException:EditNetworkDriveActivity.kt$EditNetworkDriveActivity$e: Exception</ID>
     <ID>SwallowedException:ItemsAdapter.kt$ItemsAdapter$e: Exception</ID>
     <ID>SwallowedException:MimeTypesActivity.kt$MimeTypesActivity$e: Exception</ID>
     <ID>SwallowedException:StorageFragment.kt$StorageFragment$e: Exception</ID>
+    <ID>ThrowsCount:ClientPool.kt$ClientPool$fun &lt;T&gt; use(config: ConnectionConfig, retryOnStale: Boolean = false, block: (RemoteClient) -&gt; T): T</ID>
+    <ID>ThrowsCount:RemoteFiles.kt$RemoteFiles$fun download(path: String, token: CancellationToken = CancellationToken(), listener: TransferListener = object : TransferListener {}): File</ID>
+    <ID>ThrowsCount:SftpRemoteClient.kt$SftpRemoteClient$private fun &lt;T&gt; operation(path: String, block: (ChannelSftp) -&gt; T): T</ID>
+    <ID>ThrowsCount:SmbRemoteClient.kt$SmbRemoteClient$private fun listShares(): List&lt;RemoteEntry&gt;</ID>
+    <ID>ThrowsCount:TransferEngine.kt$TransferEngine$fun run(job: TransferJob, token: CancellationToken = CancellationToken(), listener: TransferListener = object : TransferListener {}): TransferResult</ID>
     <ID>TooGenericExceptionCaught:DecompressActivity.kt$DecompressActivity$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:EditNetworkDriveActivity.kt$EditNetworkDriveActivity$e: Exception</ID>
     <ID>TooGenericExceptionCaught:ItemsAdapter.kt$ItemsAdapter$e: Exception</ID>
     <ID>TooGenericExceptionCaught:ItemsAdapter.kt$ItemsAdapter$exception: Exception</ID>
+    <ID>TooGenericExceptionCaught:ItemsFragment.kt$ItemsFragment$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:MainActivity.kt$MainActivity$e: Exception</ID>
     <ID>TooGenericExceptionCaught:MimeTypesActivity.kt$MimeTypesActivity$e: Exception</ID>
     <ID>TooGenericExceptionCaught:ReadTextActivity.kt$ReadTextActivity$e: Exception</ID>
     <ID>TooGenericExceptionCaught:RecentsFragment.kt$RecentsFragment$e: Exception</ID>
@@ -120,18 +260,31 @@
     <ID>TooGenericExceptionCaught:RootHelpers.kt$RootHelpers$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:SaveAsActivity.kt$SaveAsActivity$e: Exception</ID>
     <ID>TooGenericExceptionCaught:StorageFragment.kt$StorageFragment$e: Exception</ID>
+    <ID>TooManyFunctions:ConnectionRepository.kt$ConnectionRepository</ID>
+    <ID>TooManyFunctions:ControlPortSocket.kt$ControlPortSocket : Socket</ID>
     <ID>TooManyFunctions:DecompressActivity.kt$DecompressActivity : SimpleActivity</ID>
     <ID>TooManyFunctions:DecompressItemsAdapter.kt$DecompressItemsAdapter : MyRecyclerViewAdapter</ID>
+    <ID>TooManyFunctions:EditNetworkDriveActivity.kt$EditNetworkDriveActivity : SimpleActivity</ID>
+    <ID>TooManyFunctions:FtpRemoteClient.kt$FtpRemoteClient : RemoteClient</ID>
     <ID>TooManyFunctions:ItemsAdapter.kt$ItemsAdapter : MyRecyclerViewAdapterOnPopupTextUpdate</ID>
-    <ID>TooManyFunctions:ItemsFragment.kt$ItemsFragment : MyViewPagerFragmentItemOperationsListenerBreadcrumbsListener</ID>
+    <ID>TooManyFunctions:ItemsFragment.kt$ItemsFragment : MyViewPagerFragmentItemOperationsListenerBreadcrumbsListenerListener</ID>
+    <ID>TooManyFunctions:LocalFileSystem.kt$LocalFileSystem : FileSystem</ID>
     <ID>TooManyFunctions:MainActivity.kt$MainActivity : SimpleActivity</ID>
     <ID>TooManyFunctions:ManageFavoritesAdapter.kt$ManageFavoritesAdapter : MyRecyclerViewAdapter</ID>
     <ID>TooManyFunctions:MimeTypesActivity.kt$MimeTypesActivity : SimpleActivityItemOperationsListener</ID>
     <ID>TooManyFunctions:ReadTextActivity.kt$ReadTextActivity : SimpleActivity</ID>
     <ID>TooManyFunctions:RecentsFragment.kt$RecentsFragment : MyViewPagerFragmentItemOperationsListener</ID>
+    <ID>TooManyFunctions:RemoteActions.kt$RemoteActions</ID>
+    <ID>TooManyFunctions:RemoteFiles.kt$RemoteFiles</ID>
     <ID>TooManyFunctions:RootHelpers.kt$RootHelpers</ID>
     <ID>TooManyFunctions:SettingsActivity.kt$SettingsActivity : SimpleActivity</ID>
+    <ID>TooManyFunctions:SftpRemoteClient.kt$SftpRemoteClient : RemoteClient</ID>
+    <ID>TooManyFunctions:SmbRemoteClient.kt$SmbRemoteClient : RemoteClient</ID>
     <ID>TooManyFunctions:StorageFragment.kt$StorageFragment : MyViewPagerFragmentItemOperationsListener</ID>
+    <ID>TooManyFunctions:TransferEngine.kt$TransferEngine</ID>
+    <ID>TooManyFunctions:TransferService.kt$TransferService : Service</ID>
+    <ID>UnusedParameter:FtpRemoteClient.kt$FtpRemoteClient$path: String</ID>
+    <ID>UseCheckOrError:SecretCipher.kt$KeySecretCipher$throw IllegalStateException("No encryption key available")</ID>
     <ID>VariableNaming:ItemsAdapter.kt$ItemsAdapter$val SAFPath = getFirstSelectedItemPath()</ID>
     <ID>VariableNaming:RecentsFragment.kt$RecentsFragment$private val RECENTS_LIMIT = 50</ID>
     <ID>VariableNaming:StorageFragment.kt$StorageFragment$private val SIZE_DIVIDER = 100000</ID>

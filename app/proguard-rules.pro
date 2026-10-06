@@ -2,3 +2,21 @@
 -dontnote org.apache.http.**
 -keep class org.fossify.** { *; }
 -dontwarn org.fossify.**
+
+# Network drives: these libraries look up classes by name and use ServiceLoader/reflection
+-keep class com.jcraft.jsch.** { *; }
+-keep class com.hierynomus.** { *; }
+-keep class com.rapid7.client.dcerpc.** { *; }
+-keep class org.bouncycastle.** { *; }
+-keep class org.apache.commons.net.** { *; }
+-keep class net.engio.mbassy.** { *; }
+-dontwarn com.jcraft.jsch.**
+-dontwarn org.ietf.jgss.**
+-dontwarn javax.el.**
+-dontwarn javax.naming.**
+-dontwarn org.slf4j.**
+-dontwarn org.bouncycastle.**
+-dontwarn net.engio.mbassy.**
+-dontwarn com.sun.jna.**
+-dontwarn org.apache.commons.net.**
+-dontwarn java.rmi.**

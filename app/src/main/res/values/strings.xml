@@ -102,7 +102,6 @@
     <string name="drive_pick_protocol">Connect using</string>
     <string name="drive_invalid_host">Enter the server address</string>
     <string name="drive_invalid_port">The port must be a number between 1 and 65535</string>
-    <string name="drive_invalid_share">SMB needs a share name or an empty field</string>
     <string name="drive_storage_failed">The password could not be stored securely on this device</string>
     <string name="drive_delete_confirm">Remove “%1$s” from the list? Files on the server are not affected.</string>
     <string name="drive_connecting_to">Connecting to %1$s…</string>
@@ -127,9 +126,7 @@
     <string name="password_required">Enter the password for “%1$s”. It will be saved encrypted on this device.</string>
     <string name="password_wrong">Sign-in to “%1$s” failed. Enter the password again.</string>
     <!-- Browsing and file actions -->
-    <string name="network_drive_label">Network drive</string>
     <string name="network_opening_file">Downloading %1$s…</string>
-    <string name="network_item_count">%1$d items</string>
     <string name="network_calculating">Calculating…</string>
     <string name="network_property_name">Name</string>
     <string name="network_property_location">Location</string>
@@ -141,14 +138,12 @@
     <string name="device_storage">Device storage</string>
     <string name="network_choose_folder">Choose folder</string>
     <string name="network_select_this_folder">Select this folder</string>
-    <string name="network_folder_up">Up</string>
     <string name="network_folder_empty">No subfolders</string>
     <string name="network_folder_loading_failed">Could not open the folder</string>
     <string name="conflict_title">Some items already exist at the destination</string>
     <string name="conflict_overwrite">Replace existing items</string>
     <string name="conflict_skip">Skip existing items</string>
     <string name="conflict_keep_both">Keep both (rename the new ones)</string>
-    <string name="network_search_folder_only">Searching in this folder only</string>
     <string name="editing_saving_remote">Saving to the server…</string>
     <string name="editing_saved_remote">Saved on the server</string>
     <!-- Transfers -->
@@ -170,11 +165,6 @@
     <string name="transfer_failed_title">Transfer finished with errors</string>
     <string name="transfer_failed_text">Failed: %1$d. First error: %2$s</string>
     <string name="transfer_cancelled">Transfer cancelled</string>
-    <string name="transfer_notification_permission">Allow notifications to follow the progress of transfers</string>
-    <plurals name="transfer_items">
-        <item quantity="one">%d item</item>
-        <item quantity="other">%d items</item>
-    </plurals>
         <string name="network_new_folder">New folder</string>
         <string name="network_drive_open">Open</string>
     <!--

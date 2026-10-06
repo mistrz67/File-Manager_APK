@@ -27,6 +27,7 @@ junit = "4.13.2"
 sshd = "2.15.0"
 ftpserver = "1.2.1"
 orgJson = "20250107"
+robolectric = "4.17"
 #Gradle
 gradlePlugins-agp = "9.4.1"
 #build
@@ -61,6 +62,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 sshd-sftp = { module = "org.apache.sshd:sshd-sftp", version.ref = "sshd" }
 ftpserver-core = { module = "org.apache.ftpserver:ftpserver-core", version.ref = "ftpserver" }
 org-json = { module = "org.json:json", version.ref = "orgJson" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 [plugins]
 android = { id = "com.android.application", version.ref = "gradlePlugins-agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

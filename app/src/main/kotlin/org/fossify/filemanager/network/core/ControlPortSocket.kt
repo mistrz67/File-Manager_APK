@@ -5,7 +5,6 @@ import java.io.OutputStream
 import java.net.InetAddress
 import java.net.Socket
 import java.net.SocketAddress
-import java.net.SocketOption
 import java.nio.channels.SocketChannel
 
 /**
@@ -99,15 +98,6 @@ internal class ControlPortSocket(
 
     override fun setPerformancePreferences(connectionTime: Int, latency: Int, bandwidth: Int) =
         delegate.setPerformancePreferences(connectionTime, latency, bandwidth)
-
-    override fun <T : Any?> setOption(name: SocketOption<T>?, value: T): Socket {
-        delegate.setOption(name, value)
-        return this
-    }
-
-    override fun <T : Any?> getOption(name: SocketOption<T>?): T = delegate.getOption(name)
-
-    override fun supportedOptions(): MutableSet<SocketOption<*>> = delegate.supportedOptions()
 
     override fun toString(): String = delegate.toString()
 }

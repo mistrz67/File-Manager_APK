@@ -118,6 +118,12 @@ android {
 
     namespace = project.property("APP_ID").toString()
 
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
     lint {
         checkReleaseBuilds = false
         abortOnError = true
@@ -165,6 +171,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.org.json)
+    testImplementation(libs.robolectric)
     testImplementation(libs.sshd.sftp)
     testImplementation(libs.ftpserver.core)
     testRuntimeOnly(libs.slf4j.nop)

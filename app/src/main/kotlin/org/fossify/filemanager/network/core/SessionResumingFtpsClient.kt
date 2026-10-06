@@ -17,7 +17,8 @@ import javax.net.ssl.SSLSocket
  * session of the control connection. TLS stacks find resumable sessions by peer host and port, and a data
  * connection goes to another port, so the stock client never resumes. Here the data socket is layered over the
  * plain connection using the control connection's host and port as its identity, which makes the cached session
- * be found. Active mode keeps the stock behaviour.
+ * be found. Active mode keeps the stock behaviour, and so does a TLS stack that cannot work with the wrapped
+ * socket: the first failed handshake switches this client back to the stock data connections.
  */
 internal class SessionResumingFtpsClient(
     isImplicit: Boolean,
@@ -27,8 +28,11 @@ internal class SessionResumingFtpsClient(
     private val dataTimeoutMs: Int,
 ) : FTPSClient(isImplicit, sslContext) {
 
+    @Volatile
+    private var resumeSessions = true
+
     override fun _openDataConnection_(command: String?, arg: String?): Socket? {
-        if (dataConnectionMode != FTPClient.PASSIVE_LOCAL_DATA_CONNECTION_MODE) {
+        if (!resumeSessions || dataConnectionMode != FTPClient.PASSIVE_LOCAL_DATA_CONNECTION_MODE) {
             return super._openDataConnection_(command, arg)
         }
 
@@ -53,16 +57,27 @@ internal class SessionResumingFtpsClient(
                 return null
             }
 
-            val secure = sslContext.socketFactory.createSocket(ControlPortSocket(plain, controlPort), controlHost, controlPort, true) as SSLSocket
-            secure.useClientMode = true
-            enabledProtocols?.let { secure.enabledProtocols = it }
-            if (isEndpointCheckingEnabled) {
-                // the control connection sets this; a session can only be resumed by a socket with the same setting
-                val parameters = secure.sslParameters
-                parameters.endpointIdentificationAlgorithm = "HTTPS"
-                secure.sslParameters = parameters
+            val secure: SSLSocket
+            try {
+                secure = sslContext.socketFactory
+                    .createSocket(ControlPortSocket(plain, controlPort), controlHost, controlPort, true) as SSLSocket
+                secure.useClientMode = true
+                enabledProtocols?.let { secure.enabledProtocols = it }
+                if (isEndpointCheckingEnabled) {
+                    // the control connection sets this; a session can only be resumed by a socket with the same setting
+                    val parameters = secure.sslParameters
+                    parameters.endpointIdentificationAlgorithm = "HTTPS"
+                    secure.sslParameters = parameters
+                }
+                secure.startHandshake()
+            } catch (e: Exception) {
+                // this TLS stack does not cooperate with the wrapped socket: give up resuming, answer the
+                // transfer the server is still waiting for, and start over the way the stock client does
+                resumeSessions = false
+                runCatching { plain.close() }
+                getReply()
+                return super._openDataConnection_(command, arg)
             }
-            secure.startHandshake()
             return secure
         } catch (e: IOException) {
             runCatching { plain.close() }

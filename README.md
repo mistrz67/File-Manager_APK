@@ -13,12 +13,17 @@ Tired of file managers that slow you down and invade your privacy? Unlock a ligh
 
 **🔐 FORTIFY YOUR DATA WITH UNPARALLELED PRIVACY AND SECURITY:**
  - Secure sensitive files with password, pattern, or fingerprint locks for hidden items or the entire app.
- - No internet access required – your files stay private and secure on your device.
+ - No internet access required for local files – network access is used only when you connect a network drive yourself.
 
 **💾 MASTER YOUR STORAGE LIKE A PRO:**
  - Clear space with easy file and folder compression to maximize your device's potential.
  - Identify and clean up space-hogging files with the built-in storage analysis tool.
  - Seamlessly navigate root files, SD cards, and USB devices for total organization.
+
+**🌐 NETWORK DRIVES (this fork):**
+ - Connect SMB / Samba, SFTP (SSH) and FTP / FTPS servers from the storage picker, with saved logins (encrypted with an Android Keystore key, never included in backups).
+ - Find servers in your local network, browse, open, edit text files in place, copy, move and delete between phone and drive, with background transfers.
+ - Trust-on-first-use pinning of SSH host keys and FTPS certificates. See [docs/NETWORK_DRIVES.md](docs/NETWORK_DRIVES.md) (Polish: [docs/NETWORK_DRIVES.pl.md](docs/NETWORK_DRIVES.pl.md)).
 
 **📁 OPTIMIZE YOUR WORKFLOW WITH HANDY TOOLS:**
  - Create desktop shortcuts for instant access to your most-used files and folders.

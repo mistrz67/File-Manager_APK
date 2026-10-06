@@ -207,7 +207,7 @@ class EditNetworkDriveActivity : SimpleActivity() {
     private fun loadKey(uri: Uri) {
         ensureBackgroundThread {
             try {
-                val bytes = contentResolver.openInputStream(uri)?.use { it.readNBytes(MAX_KEY_BYTES + 1) } ?: ByteArray(0)
+                val bytes = contentResolver.openInputStream(uri)?.use { readUpTo(it, MAX_KEY_BYTES + 1) } ?: ByteArray(0)
                 val text = String(bytes, Charsets.UTF_8)
                 runOnUiThread {
                     if (bytes.size > MAX_KEY_BYTES || !text.contains("PRIVATE KEY")) {
@@ -321,4 +321,16 @@ class EditNetworkDriveActivity : SimpleActivity() {
     }
 
     // endregion
+}
+
+/** Reads at most [limit] bytes; `InputStream.readNBytes` only exists from Android 13. */
+private fun readUpTo(input: java.io.InputStream, limit: Int): ByteArray {
+    val out = java.io.ByteArrayOutputStream()
+    val buffer = ByteArray(8 * 1024)
+    while (out.size() < limit) {
+        val read = input.read(buffer, 0, minOf(buffer.size, limit - out.size()))
+        if (read < 0) break
+        out.write(buffer, 0, read)
+    }
+    return out.toByteArray()
 }

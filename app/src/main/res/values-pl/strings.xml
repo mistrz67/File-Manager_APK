@@ -88,7 +88,6 @@
     <string name="drive_pick_protocol">Połącz przez</string>
     <string name="drive_invalid_host">Podaj adres serwera</string>
     <string name="drive_invalid_port">Port musi być liczbą od 1 do 65535</string>
-    <string name="drive_invalid_share">Nieprawidłowa nazwa udziału</string>
     <string name="drive_storage_failed">Nie udało się bezpiecznie zapisać hasła na tym urządzeniu</string>
     <string name="drive_delete_confirm">Usunąć „%1$s” z listy? Pliki na serwerze pozostaną nietknięte.</string>
     <string name="drive_connecting_to">Łączenie z %1$s…</string>
@@ -111,9 +110,7 @@
     <string name="trust_server_trust">Zaufaj i połącz</string>
     <string name="password_required">Podaj hasło dla „%1$s”. Zostanie zapisane na tym urządzeniu w postaci zaszyfrowanej.</string>
     <string name="password_wrong">Logowanie do „%1$s” nie powiodło się. Podaj hasło ponownie.</string>
-    <string name="network_drive_label">Dysk sieciowy</string>
     <string name="network_opening_file">Pobieranie %1$s…</string>
-    <string name="network_item_count">Elementów: %1$d</string>
     <string name="network_calculating">Obliczanie…</string>
     <string name="network_property_name">Nazwa</string>
     <string name="network_property_location">Lokalizacja</string>
@@ -125,14 +122,12 @@
     <string name="device_storage">Pamięć urządzenia</string>
     <string name="network_choose_folder">Wybierz folder</string>
     <string name="network_select_this_folder">Wybierz ten folder</string>
-    <string name="network_folder_up">W górę</string>
     <string name="network_folder_empty">Brak podfolderów</string>
     <string name="network_folder_loading_failed">Nie można otworzyć folderu</string>
     <string name="conflict_title">Część elementów już istnieje w miejscu docelowym</string>
     <string name="conflict_overwrite">Zastąp istniejące elementy</string>
     <string name="conflict_skip">Pomiń istniejące elementy</string>
     <string name="conflict_keep_both">Zachowaj oba (zmień nazwy nowych)</string>
-    <string name="network_search_folder_only">Wyszukiwanie tylko w tym folderze</string>
     <string name="editing_saving_remote">Zapisywanie na serwerze…</string>
     <string name="editing_saved_remote">Zapisano na serwerze</string>
     <string name="transfer_channel_name">Transfery plików</string>
@@ -153,13 +148,6 @@
     <string name="transfer_failed_title">Transfer zakończony z błędami</string>
     <string name="transfer_failed_text">Błędów: %1$d. Pierwszy: %2$s</string>
     <string name="transfer_cancelled">Transfer anulowany</string>
-    <string name="transfer_notification_permission">Zezwól na powiadomienia, aby śledzić postęp transferów</string>
-    <plurals name="transfer_items">
-        <item quantity="one">%d element</item>
-        <item quantity="few">%d elementy</item>
-        <item quantity="many">%d elementów</item>
-        <item quantity="other">%d elementu</item>
-    </plurals>
     <string name="network_new_folder">Nowy folder</string>
     <string name="network_drive_open">Otwórz</string>
 </resources>

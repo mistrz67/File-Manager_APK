@@ -28,18 +28,57 @@ complexity:
     ignoreAnnotated:
       - "Composable"
       - "Preview"
+  # Tests are long and descriptive by nature
+  TooManyFunctions:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**"]
+  LargeClass:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**"]
+  CyclomaticComplexMethod:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**"]
+  NestedBlockDepth:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**"]
+
+exceptions:
+  # The protocol clients wrap whatever the SMB/SSH/FTP libraries throw into the app's own RemoteException types
+  # (see network/core/RemoteExceptions.kt), and the tests assert on failures.
+  TooGenericExceptionCaught:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**", "**/filemanager/network/**"]
+  SwallowedException:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**", "**/filemanager/network/**"]
+  InstanceOfCheckForException:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**", "**/filemanager/network/**"]
+  RethrowCaughtException:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**", "**/filemanager/network/**"]
+
+empty-blocks:
+  EmptyFunctionBlock:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**"]
 
 style:
+  ThrowsCount:
+    active: true
+    excludes: ["**/test/**", "**/androidTest/**"]
   MagicNumber:
     active: true
     ignoreAnnotated: ["Composable"]
     ignoreEnums: true
     ignoreNumbers: ["-1", "0", "1", "2", "42", "1000"]
+    excludes: ["**/test/**", "**/androidTest/**"]
   MaxLineLength:
     active: true
     maxLineLength: 120
     excludePackageStatements: true
     excludeImportStatements: true
+    excludes: ["**/test/**", "**/androidTest/**"]
   ReturnCount:
     active: true
     max: 4

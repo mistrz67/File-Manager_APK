@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added network drives: connect SMB, SFTP and FTP/FTPS servers with saved (encrypted) credentials, discover servers in the local network, browse and open remote files, edit text files in place and copy/move/delete in the background
+- Added a GitHub Actions workflow that builds the APK
+
 ### Fixed
 - Fixed the modification of the original timestamp when decompressing folders ([#190])
 

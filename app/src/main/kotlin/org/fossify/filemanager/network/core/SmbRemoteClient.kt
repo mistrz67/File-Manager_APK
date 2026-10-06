@@ -132,12 +132,17 @@ class SmbRemoteClient(
                 .filter { (it.type and TYPE_MASK) == STYPE_DISKTREE && (it.type and STYPE_SPECIAL) == 0 && !it.netName.endsWith("$") }
                 .map { RemoteEntry(it.netName, "/${it.netName}", true) }
         } catch (e: Exception) {
-            throw RemoteException(
-                "Could not list the shares of ${connection.host}. Enter the share name in the drive settings.",
-                e
-            )
+            throw sharesUnavailable(e)
+        } catch (e: LinkageError) {
+            // the share lookup library refers to java.rmi exceptions, which Android does not have
+            throw sharesUnavailable(e)
         }
     }
+
+    private fun sharesUnavailable(cause: Throwable) = RemoteException(
+        "Could not list the shares of ${connection.host}. Enter the share name in the drive settings.",
+        cause
+    )
 
     override fun stat(path: String): RemoteEntry? {
         val normalized = Paths.normalize(path)
