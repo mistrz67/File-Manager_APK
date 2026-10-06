@@ -25,6 +25,10 @@ import org.fossify.filemanager.R
 import org.fossify.filemanager.databinding.ActivityReadTextBinding
 import org.fossify.filemanager.dialogs.SaveAsDialog
 import org.fossify.filemanager.extensions.openPath
+import org.fossify.filemanager.network.core.RemotePath
+import org.fossify.filemanager.network.data.networkManager
+import org.fossify.filemanager.network.ui.NetworkErrors
+import org.fossify.filemanager.network.ui.RemoteActions
 import org.fossify.filemanager.views.GestureEditText
 import java.io.File
 import java.io.OutputStream
@@ -39,6 +43,9 @@ class ReadTextActivity : SimpleActivity() {
     private val binding by viewBinding(ActivityReadTextBinding::inflate)
 
     private var filePath = ""
+
+    /** Set when the file was opened from a network drive: it is edited in the cache and saved back to the server. */
+    private var remotePath: String? = null
     private var originalText = ""
     private var searchIndex = 0
     private var lastSavePromptTS = 0L
@@ -68,6 +75,7 @@ class ReadTextActivity : SimpleActivity() {
             return
         }
 
+        remotePath = intent.getStringExtra(RemoteActions.EXTRA_REMOTE_PATH)?.takeIf { RemotePath.isRemote(it) }
         val uri = if (intent.extras?.containsKey(REAL_FILE_PATH) == true) {
             Uri.fromFile(File(intent.extras?.get(REAL_FILE_PATH).toString()))
         } else {
@@ -148,7 +156,13 @@ class ReadTextActivity : SimpleActivity() {
                 R.id.menu_search -> openSearch()
                 R.id.menu_save -> saveText()
                 R.id.menu_save_as -> saveAsText()
-                R.id.menu_open_with -> openPath(intent.dataString!!, true)
+                R.id.menu_open_with -> {
+                    if (remotePath != null) {
+                        intent.data?.path?.let { openPath(it, true) }
+                    } else {
+                        openPath(intent.dataString!!, true)
+                    }
+                }
                 R.id.menu_print -> printText()
                 else -> return@setOnMenuItemClickListener false
             }
@@ -170,7 +184,8 @@ class ReadTextActivity : SimpleActivity() {
     }
 
     private fun updateFilePath() {
-        if (filePath.isEmpty()) {
+        // the cached copy of a remote file is not a place the user wants to save to
+        if (filePath.isEmpty() && remotePath == null) {
             filePath = getRealPathFromURI(intent.data!!) ?: ""
         }
     }
@@ -209,7 +224,33 @@ class ReadTextActivity : SimpleActivity() {
         }
     }
 
+    private fun saveRemote(shouldExitAfterSaving: Boolean) {
+        val remote = remotePath ?: return
+        val text = binding.readTextView.text.toString()
+        toast(R.string.editing_saving_remote)
+        ensureBackgroundThread {
+            try {
+                networkManager.files.writeBytes(remote, text.toByteArray(Charsets.UTF_8))
+                runOnUiThread {
+                    originalText = text
+                    hideKeyboard()
+                    toast(R.string.editing_saved_remote)
+                    if (shouldExitAfterSaving) {
+                        performDefaultBack()
+                    }
+                }
+            } catch (e: Exception) {
+                NetworkErrors.handle(this, RemotePath.connectionId(remote), e) { saveRemote(shouldExitAfterSaving) }
+            }
+        }
+    }
+
     private fun saveText(shouldExitAfterSaving: Boolean = false) {
+        if (remotePath != null) {
+            saveRemote(shouldExitAfterSaving)
+            return
+        }
+
         updateFilePath()
 
         if (filePath.isEmpty()) {
@@ -310,6 +351,11 @@ class ReadTextActivity : SimpleActivity() {
                 finish()
                 return
             }
+        }
+
+        if (remotePath != null) {
+            // the file path of the cached copy must not be offered as a save location
+            filePath = ""
         }
 
         runOnUiThread {

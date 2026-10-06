@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/folder_picker_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <org.fossify.commons.views.MyTextView
+        android:id="@+id/folder_picker_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="start"
+        android:paddingStart="@dimen/activity_margin"
+        android:paddingTop="@dimen/medium_margin"
+        android:paddingEnd="@dimen/activity_margin"
+        android:paddingBottom="@dimen/medium_margin"
+        android:singleLine="true"
+        android:textStyle="bold" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/folder_picker_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="320dp">
+
+        <org.fossify.commons.views.MyRecyclerView
+            android:id="@+id/folder_picker_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="org.fossify.commons.views.MyLinearLayoutManager" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/folder_picker_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha="0.8"
+            android:gravity="center"
+            android:padding="@dimen/activity_margin"
+            android:textStyle="italic"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>

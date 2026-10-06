@@ -18,6 +18,8 @@ import org.fossify.filemanager.helpers.OPEN_AS_DEFAULT
 import org.fossify.filemanager.helpers.OPEN_AS_IMAGE
 import org.fossify.filemanager.helpers.OPEN_AS_TEXT
 import org.fossify.filemanager.helpers.OPEN_AS_VIDEO
+import org.fossify.filemanager.network.core.RemotePath
+import org.fossify.filemanager.network.ui.RemoteActions
 import java.io.File
 
 fun Activity.sharePaths(paths: ArrayList<String>) {
@@ -25,6 +27,12 @@ fun Activity.sharePaths(paths: ArrayList<String>) {
 }
 
 fun Activity.tryOpenPathIntent(path: String, forceChooser: Boolean, openAsType: Int = OPEN_AS_DEFAULT, finishActivity: Boolean = false) {
+    if (RemotePath.isRemote(path)) {
+        // files on network drives are downloaded first
+        (this as? BaseSimpleActivity)?.let { RemoteActions.open(it, path, forceChooser, openAsType, finishActivity) }
+        return
+    }
+
     if (!forceChooser && path.endsWith(".apk", true)) {
         val uri = FileProvider.getUriForFile(
             this, "${BuildConfig.APPLICATION_ID}.provider", File(path)

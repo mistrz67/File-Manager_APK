@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/properties_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/properties_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/big_margin"
+        android:paddingTop="@dimen/big_margin"
+        android:paddingRight="@dimen/big_margin"
+        android:paddingBottom="@dimen/activity_margin">
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_name_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:text="@string/network_property_name" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/bigger_text_size" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_location_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:text="@string/network_property_location" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/bigger_text_size" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_size_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:text="@string/network_property_size" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:textSize="@dimen/bigger_text_size" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_files_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:text="@string/network_property_files" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_files"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:textSize="@dimen/bigger_text_size" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_modified_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:text="@string/network_property_modified" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/properties_modified"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/bigger_text_size" />
+    </LinearLayout>
+</ScrollView>

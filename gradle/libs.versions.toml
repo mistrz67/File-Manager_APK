@@ -26,6 +26,7 @@ slf4j = "2.0.17"
 junit = "4.13.2"
 sshd = "2.15.0"
 ftpserver = "1.2.1"
+orgJson = "20250107"
 #Gradle
 gradlePlugins-agp = "9.4.1"
 #build
@@ -59,6 +60,7 @@ slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
 junit = { module = "junit:junit", version.ref = "junit" }
 sshd-sftp = { module = "org.apache.sshd:sshd-sftp", version.ref = "sshd" }
 ftpserver-core = { module = "org.apache.ftpserver:ftpserver-core", version.ref = "ftpserver" }
+org-json = { module = "org.json:json", version.ref = "orgJson" }
 [plugins]
 android = { id = "com.android.application", version.ref = "gradlePlugins-agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

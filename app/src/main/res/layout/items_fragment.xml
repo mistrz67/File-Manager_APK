@@ -16,15 +16,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <org.fossify.commons.views.Breadcrumbs
-                android:id="@+id/breadcrumbs"
+            <FrameLayout
+                android:id="@+id/breadcrumbs_holder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/medium_margin"
-                android:paddingStart="@dimen/activity_margin"
-                android:paddingTop="@dimen/small_margin"
-                android:paddingEnd="@dimen/small_margin"
-                android:paddingBottom="@dimen/small_margin" />
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.Breadcrumbs
+                    android:id="@+id/breadcrumbs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/medium_margin"
+                    android:paddingStart="@dimen/activity_margin"
+                    android:paddingTop="@dimen/small_margin"
+                    android:paddingEnd="@dimen/small_margin"
+                    android:paddingBottom="@dimen/small_margin" />
+
+                <org.fossify.filemanager.network.ui.RemoteBreadcrumbs
+                    android:id="@+id/remote_breadcrumbs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/medium_margin"
+                    android:paddingStart="@dimen/activity_margin"
+                    android:paddingTop="@dimen/small_margin"
+                    android:paddingEnd="@dimen/small_margin"
+                    android:paddingBottom="@dimen/small_margin"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/progress_bar"
@@ -42,7 +59,7 @@
                 android:id="@+id/items_placeholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/breadcrumbs"
+                android:layout_below="@+id/breadcrumbs_holder"
                 android:layout_centerHorizontal="true"
                 android:alpha="0.8"
                 android:gravity="center"
@@ -72,7 +89,7 @@
                 android:id="@+id/items_swipe_refresh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/breadcrumbs">
+                android:layout_below="@+id/breadcrumbs_holder">
 
                 <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
                     android:id="@+id/items_fastscroller"

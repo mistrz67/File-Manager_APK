@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Saved network drive passwords are encrypted with a key that exists only on this device,
+     so backing them up would only restore data that cannot be decrypted. -->
+<full-backup-content>
+    <exclude domain="sharedpref" path="network_drive_secrets.xml" />
+</full-backup-content>

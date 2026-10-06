@@ -59,6 +59,11 @@
         android:title="@string/column_count"
         app:showAsAction="never" />
     <item
+        android:id="@+id/network_drives"
+        android:icon="@drawable/ic_network_drive_vector"
+        android:title="@string/network_drives"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings_cog_vector"
         android:title="@string/settings"

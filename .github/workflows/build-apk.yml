@@ -1,0 +1,114 @@
+name: Build APK
+
+# Builds an installable APK of this fork (with the network drive support) on every push and on demand.
+# Download it from the "Artifacts" section of the workflow run (Actions tab), or, for a manual run with
+# "Publish a release" ticked, from the Releases page.
+#
+# Optional: sign the APK with your own key so that new builds can be installed over old ones (and keep the
+# saved network drives). Add these repository secrets (Settings > Secrets and variables > Actions):
+#   SIGNING_KEYSTORE_BASE64  the keystore file, base64 encoded (e.g. `base64 -w0 my.keystore`)
+#   SIGNING_STORE_PASSWORD   password of the keystore
+#   SIGNING_KEY_ALIAS        alias of the key
+#   SIGNING_KEY_PASSWORD     password of the key
+# Without them the build is signed with a throw-away debug key: it installs fine, but the next build cannot be
+# installed over it (uninstall first).
+
+on:
+    push:
+        branches-ignore:
+            - "dependabot/**"
+        paths-ignore:
+            - "**/*.md"
+            - "fastlane/**"
+    workflow_dispatch:
+        inputs:
+            publish_release:
+                description: "Publish a release with the APK"
+                type: boolean
+                default: false
+
+permissions:
+    contents: write
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        timeout-minutes: 45
+
+        steps:
+            - name: Check out
+              uses: actions/checkout@v4
+
+            - name: Set up Java
+              uses: actions/setup-java@v4
+              with:
+                  distribution: temurin
+                  java-version: 21
+
+            - name: Set up Gradle
+              uses: gradle/actions/setup-gradle@v4
+
+            - name: Accept Android SDK licenses
+              run: yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+            - name: Prepare signing key
+              id: signing
+              env:
+                  KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
+                  STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+                  KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+                  KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+              run: |
+                  if [ -n "$KEYSTORE_BASE64" ] && [ -n "$STORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ] && [ -n "$KEY_PASSWORD" ]; then
+                      echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/signing.keystore"
+                      echo "SIGNING_STORE_FILE=$RUNNER_TEMP/signing.keystore" >> "$GITHUB_ENV"
+                      echo "SIGNING_STORE_PASSWORD=$STORE_PASSWORD" >> "$GITHUB_ENV"
+                      echo "SIGNING_KEY_ALIAS=$KEY_ALIAS" >> "$GITHUB_ENV"
+                      echo "SIGNING_KEY_PASSWORD=$KEY_PASSWORD" >> "$GITHUB_ENV"
+                      echo "signed=true" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "signed=false" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Run unit tests
+              run: ./gradlew :app:testFossDebugUnitTest --stacktrace
+
+            - name: Build APK
+              run: ./gradlew :app:assembleFossDebug --stacktrace
+
+            - name: Collect APK
+              run: |
+                  mkdir -p dist
+                  cp app/build/outputs/apk/foss/debug/*.apk dist/
+                  {
+                      echo "### APK built"
+                      ls -1 dist | sed 's/^/- /'
+                      if [ "${{ steps.signing.outputs.signed }}" = "true" ]; then
+                          echo "Signed with your own key: new builds can be installed over this one."
+                      else
+                          echo "Signed with a throw-away debug key: uninstall the previous build before installing this one."
+                      fi
+                  } >> "$GITHUB_STEP_SUMMARY"
+
+            - name: Upload APK
+              uses: actions/upload-artifact@v4
+              with:
+                  name: file-manager-apk
+                  path: dist/*.apk
+                  if-no-files-found: error
+
+            - name: Upload test reports
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: test-reports
+                  path: app/build/reports/tests
+
+            - name: Publish release
+              if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_release }}
+              uses: softprops/action-gh-release@v2
+              with:
+                  tag_name: network-drives-build-${{ github.run_number }}
+                  name: File Manager with network drives (build ${{ github.run_number }})
+                  prerelease: true
+                  files: dist/*.apk

@@ -67,6 +67,10 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
+            if (hasSigningVars()) {
+                // CI builds signed with the owner's key can be installed over each other
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
         release {
             isMinifyEnabled = true
@@ -160,6 +164,7 @@ dependencies {
     detektPlugins(libs.compose.detekt)
 
     testImplementation(libs.junit)
+    testImplementation(libs.org.json)
     testImplementation(libs.sshd.sftp)
     testImplementation(libs.ftpserver.core)
     testRuntimeOnly(libs.slf4j.nop)

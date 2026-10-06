@@ -16,6 +16,8 @@ import org.fossify.filemanager.databinding.StorageFragmentBinding
 import org.fossify.filemanager.extensions.isPathOnRoot
 import org.fossify.filemanager.extensions.tryOpenPathIntent
 import org.fossify.filemanager.helpers.RootHelpers
+import org.fossify.filemanager.network.core.RemotePath
+import org.fossify.filemanager.network.ui.RemoteActions
 
 abstract class MyViewPagerFragment<BINDING : MyViewPagerFragment.InnerBinding>(context: Context, attributeSet: AttributeSet) :
     RelativeLayout(context, attributeSet) {
@@ -31,7 +33,9 @@ abstract class MyViewPagerFragment<BINDING : MyViewPagerFragment.InnerBinding>(c
     protected lateinit var innerBinding: BINDING
 
     protected fun clickedPath(path: String) {
-        if (isGetContentIntent || isCreateDocumentIntent) {
+        if (RemotePath.isRemote(path) && (isGetContentIntent || isCreateDocumentIntent || isGetRingtonePicker)) {
+            activity?.toast(R.string.network_no_connection_picker)
+        } else if (isGetContentIntent || isCreateDocumentIntent) {
             (activity as MainActivity).pickedPath(path)
         } else if (isGetRingtonePicker) {
             if (path.isAudioFast()) {
@@ -62,7 +66,10 @@ abstract class MyViewPagerFragment<BINDING : MyViewPagerFragment.InnerBinding>(c
             return
         }
 
-        if (context!!.isPathOnRoot(firstPath)) {
+        if (RemotePath.isRemote(firstPath)) {
+            // deleting on a network drive can take long, so it runs in the background service
+            RemoteActions.delete(activity as SimpleActivity, files)
+        } else if (context!!.isPathOnRoot(firstPath)) {
             RootHelpers(activity!!).deleteFiles(files)
         } else {
             (activity as SimpleActivity).deleteFiles(files, hasFolder) {

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/edit_drive_coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.fossify.commons.views.MyAppBarLayout
+        android:id="@+id/edit_drive_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/edit_drive_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/color_primary"
+            app:menu="@menu/menu_edit_network_drive"
+            app:title="@string/add_network_drive"
+            app:titleTextAppearance="@style/AppTheme.ActionBar.TitleTextStyle" />
+
+    </org.fossify.commons.views.MyAppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/edit_drive_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:id="@+id/edit_drive_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_margin">
+
+            <org.fossify.commons.views.MyTextInputLayout
+                android:id="@+id/edit_drive_protocol_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:hint="@string/network_drive_type">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_drive_protocol"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    android:textSize="@dimen/bigger_text_size" />
+            </org.fossify.commons.views.MyTextInputLayout>
+
+            <org.fossify.commons.views.MyTextInputLayout
+                android:id="@+id/edit_drive_name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:hint="@string/drive_name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_drive_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"
+                    android:singleLine="true"
+                    android:textSize="@dimen/bigger_text_size" />
+            </org.fossify.commons.views.MyTextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <org.fossify.commons.views.MyTextInputLayout
+                    android:id="@+id/edit_drive_host_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/drive_host">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_drive_host"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textUri"
+                        android:singleLine="true"
+                        android:textSize="@dimen/bigger_text_size" />
+                </org.fossify.commons.views.MyTextInputLayout>
+
+                <ImageView
+                    android:id="@+id/edit_drive_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/drive_scan_network"
+                    android:padding="@dimen/activity_margin"
+                    android:src="@drawable/ic_scan_network_vector" />
+            </LinearLayout>
+
+            <org.fossify.commons.views.MyTextInputLayout
+                android:id="@+id/edit_drive_port_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:hint="@string/drive_port">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_drive_port"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:textSize="@dimen/bigger_text_size" />
+            </org.fossify.commons.views.MyTextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/edit_drive_smb_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <org.fossify.commons.views.MyTextInputLayout
+                    android:id="@+id/edit_drive_share_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/medium_margin"
+                    android:hint="@string/drive_share"
+                    app:helperText="@string/drive_share_hint"
+                    app:helperTextEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_drive_share"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:textSize="@dimen/bigger_text_size" />
+                </org.fossify.commons.views.MyTextInputLayout>
+
+                <org.fossify.commons.views.MyTextInputLayout
+                    android:id="@+id/edit_drive_domain_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/medium_margin"
+                    android:hint="@string/drive_domain">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_drive_domain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:textSize="@dimen/bigger_text_size" />
+                </org.fossify.commons.views.MyTextInputLayout>
+            </LinearLayout>
+
+            <org.fossify.commons.views.MyTextInputLayout
+                android:id="@+id/edit_drive_initial_path_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:hint="@string/drive_initial_path">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_drive_initial_path"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:singleLine="true"
+                    android:textSize="@dimen/bigger_text_size" />
+            </org.fossify.commons.views.MyTextInputLayout>
+
+            <org.fossify.commons.views.MyTextInputLayout
+                android:id="@+id/edit_drive_auth_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:hint="@string/drive_auth">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_drive_auth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    android:textSize="@dimen/bigger_text_size" />
+            </org.fossify.commons.views.MyTextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/edit_drive_username_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <org.fossify.commons.views.MyTextInputLayout
+                    android:id="@+id/edit_drive_username_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/medium_margin"
+                    android:hint="@string/drive_username">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_drive_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:textSize="@dimen/bigger_text_size" />
+                </org.fossify.commons.views.MyTextInputLayout>
+            </LinearLayout>
+
+            <org.fossify.commons.views.MyTextInputLayout
+                android:id="@+id/edit_drive_password_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:hint="@string/drive_password"
+                app:endIconMode="password_toggle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_drive_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textSize="@dimen/bigger_text_size" />
+            </org.fossify.commons.views.MyTextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/edit_drive_key_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <org.fossify.commons.views.MyButton
+                    android:id="@+id/edit_drive_choose_key"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/drive_choose_key" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/edit_drive_key_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginBottom="@dimen/medium_margin"
+                    android:alpha="0.8" />
+
+                <org.fossify.commons.views.MyTextInputLayout
+                    android:id="@+id/edit_drive_passphrase_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/medium_margin"
+                    android:hint="@string/drive_passphrase"
+                    app:endIconMode="password_toggle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_drive_passphrase"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        android:textSize="@dimen/bigger_text_size" />
+                </org.fossify.commons.views.MyTextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/edit_drive_ftp_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/edit_drive_passive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/medium_margin"
+                    android:checked="true"
+                    android:paddingTop="@dimen/small_margin"
+                    android:paddingBottom="@dimen/small_margin"
+                    android:text="@string/drive_ftp_passive" />
+
+                <org.fossify.commons.views.MyTextInputLayout
+                    android:id="@+id/edit_drive_encoding_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/medium_margin"
+                    android:hint="@string/drive_ftp_encoding">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_drive_encoding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:textSize="@dimen/bigger_text_size" />
+                </org.fossify.commons.views.MyTextInputLayout>
+            </LinearLayout>
+
+            <org.fossify.commons.views.MyButton
+                android:id="@+id/edit_drive_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@string/drive_test_connection" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

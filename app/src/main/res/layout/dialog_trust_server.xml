@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/trust_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/big_margin"
+        android:paddingTop="@dimen/big_margin"
+        android:paddingRight="@dimen/big_margin"
+        android:paddingBottom="@dimen/activity_margin">
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/trust_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="@dimen/small_margin"
+            android:textSize="@dimen/bigger_text_size" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/trust_previous_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_margin"
+            android:text="@string/trust_server_previous"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/trust_previous"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textIsSelectable="true"
+            android:visibility="gone" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/trust_fingerprint_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_margin"
+            android:textStyle="bold" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/trust_fingerprint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+</ScrollView>

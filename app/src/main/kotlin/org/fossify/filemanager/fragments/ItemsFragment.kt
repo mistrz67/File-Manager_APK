@@ -25,11 +25,20 @@ import org.fossify.filemanager.helpers.MAX_COLUMN_COUNT
 import org.fossify.filemanager.helpers.RootHelpers
 import org.fossify.filemanager.interfaces.ItemOperationsListener
 import org.fossify.filemanager.models.ListItem
+import org.fossify.filemanager.network.core.RemotePath
+import org.fossify.filemanager.network.data.networkManager
+import org.fossify.filemanager.network.ui.NetworkErrors
+import org.fossify.filemanager.network.ui.NetworkPaths
+import org.fossify.filemanager.network.ui.RemoteActions
+import org.fossify.filemanager.network.ui.RemoteBreadcrumbs
+import org.fossify.filemanager.network.ui.RemoteBrowser
+import org.fossify.filemanager.network.ui.StoragePickerWithDrives
 import java.io.File
 
 class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerFragment<MyViewPagerFragment.ItemsInnerBinding>(context, attributeSet),
     ItemOperationsListener,
-    Breadcrumbs.BreadcrumbsListener {
+    Breadcrumbs.BreadcrumbsListener,
+    RemoteBreadcrumbs.Listener {
     private var showHidden = false
     private var lastSearchedText = ""
     private var scrollStates = HashMap<String, Parcelable>()
@@ -50,6 +59,7 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
             this.activity = activity
             binding.apply {
                 breadcrumbs.listener = this@ItemsFragment
+                remoteBreadcrumbs.listener = this@ItemsFragment
                 itemsSwipeRefresh.setOnRefreshListener { refreshFragment() }
                 itemsFab.setOnClickListener {
                     if (isCreateDocumentIntent) {
@@ -78,6 +88,7 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
 
             if (currentPath != "") {
                 breadcrumbs.updateColor(textColor)
+                remoteBreadcrumbs.updateColor(textColor)
             }
 
             itemsSwipeRefresh.isEnabled = lastSearchedText.isEmpty() && activity?.config?.enablePullToRefresh != false
@@ -88,6 +99,7 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
         getRecyclerAdapter()?.updateFontSizes()
         if (currentPath != "") {
             binding.breadcrumbs.updateFontSize(context!!.getTextSize(), false)
+            binding.remoteBreadcrumbs.updateFontSize(context!!.getTextSize())
         }
     }
 
@@ -146,7 +158,7 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
     private fun addItems(items: ArrayList<ListItem>, forceRefresh: Boolean = false) {
         activity?.runOnUiThread {
             binding.itemsSwipeRefresh.isRefreshing = false
-            binding.breadcrumbs.setBreadcrumb(currentPath)
+            updateBreadcrumbs()
             if (!forceRefresh && items.hashCode() == storedItems.hashCode()) {
                 return@runOnUiThread
             }
@@ -154,6 +166,7 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
             storedItems = items
             if (binding.itemsList.adapter == null) {
                 binding.breadcrumbs.updateFontSize(context!!.getTextSize(), true)
+                binding.remoteBreadcrumbs.updateFontSize(context!!.getTextSize())
             }
 
             ItemsAdapter(activity as SimpleActivity, storedItems, this, binding.itemsList, isPickMultipleIntent, binding.itemsSwipeRefresh) {
@@ -184,6 +197,11 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
     private fun getItems(path: String, callback: (originalPath: String, items: ArrayList<ListItem>) -> Unit) {
         ensureBackgroundThread {
             if (activity?.isDestroyed == false && activity?.isFinishing == false) {
+                if (RemotePath.isRemote(path)) {
+                    getRemoteItems(path, callback)
+                    return@ensureBackgroundThread
+                }
+
                 val config = context!!.config
                 if (context.isRestrictedSAFOnlyRoot(path)) {
                     activity?.runOnUiThread { hideProgressBar() }
@@ -209,6 +227,17 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
                 }
             }
         }
+    }
+
+    private fun getRemoteItems(path: String, callback: (originalPath: String, items: ArrayList<ListItem>) -> Unit) {
+        val items = try {
+            val listed = RemoteBrowser.listItems(context!!, path, showHidden)
+            ArrayList(listed.filter { item -> wantedMimeTypes.any { isProperMimeType(it, item.mPath, item.mIsDirectory) } })
+        } catch (e: Exception) {
+            activity?.let { NetworkErrors.handle(it, RemotePath.connectionId(path), e) { refreshFragment() } }
+            ArrayList()
+        }
+        callback(path, items)
     }
 
     private fun getRegularItemsOf(path: String, callback: (originalPath: String, items: ArrayList<ListItem>) -> Unit) {
@@ -326,6 +355,8 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
                     hideProgressBar()
                 }
 
+                isRemote() -> showRemoteSearchResults(text)
+
                 else -> {
                     showProgressBar()
                     ensureBackgroundThread {
@@ -368,6 +399,24 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
                     }
                 }
             }
+        }
+    }
+
+    /** Searching a network drive recursively would mean listing every folder over the network; search the open folder only. */
+    private fun showRemoteSearchResults(text: String) {
+        val normalizedText = text.normalizeString()
+        val matches = ArrayList(
+            itemsIgnoringSearch.filter {
+                !it.isSectionTitle && !it.isGridTypeDivider && it.name.normalizeString().contains(normalizedText, true)
+            }
+        )
+
+        binding.apply {
+            getRecyclerAdapter()?.updateItems(matches, text)
+            itemsFastscroller.beVisibleIf(matches.isNotEmpty())
+            itemsPlaceholder.beVisibleIf(matches.isEmpty())
+            itemsPlaceholder2.beGone()
+            hideProgressBar()
         }
     }
 
@@ -419,6 +468,11 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
     }
 
     private fun createNewItem() {
+        if (isRemote()) {
+            RemoteActions.createNew(activity as SimpleActivity, currentPath) { refreshFragment() }
+            return
+        }
+
         CreateNewItemDialog(activity as SimpleActivity, currentPath) {
             if (it) {
                 refreshFragment()
@@ -520,15 +574,49 @@ class ItemsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerF
 
     fun getBreadcrumbs() = binding.breadcrumbs
 
+    fun isRemote() = RemotePath.isRemote(currentPath)
+
+    /** Back button inside a network drive: opens the parent folder. Returns false at the root of the drive. */
+    fun goUpRemote(): Boolean {
+        val parent = RemotePath.parent(currentPath) ?: return false
+        openPath(parent)
+        return true
+    }
+
+    private fun updateBreadcrumbs() {
+        val remote = isRemote()
+        binding.breadcrumbs.beVisibleIf(!remote)
+        binding.remoteBreadcrumbs.beVisibleIf(remote)
+        if (remote) {
+            val driveName = NetworkPaths.driveName(context, RemotePath.connectionId(currentPath).orEmpty())
+            binding.remoteBreadcrumbs.setPath(driveName, currentPath)
+        } else {
+            binding.breadcrumbs.setBreadcrumb(currentPath)
+        }
+    }
+
+    override fun remoteBreadcrumbClicked(path: String) {
+        getRecyclerAdapter()?.finishActMode()
+        openPath(path)
+    }
+
     override fun toggleFilenameVisibility() {
         getRecyclerAdapter()?.updateDisplayFilenamesInGrid()
     }
 
     override fun breadcrumbClicked(id: Int) {
         if (id == 0) {
-            StoragePickerDialog(activity as SimpleActivity, currentPath, context!!.config.enableRootAccess, true) {
-                getRecyclerAdapter()?.finishActMode()
-                openPath(it)
+            val canUseDrives = !(isGetContentIntent || isCreateDocumentIntent || isGetRingtonePicker || isPickMultipleIntent)
+            if (canUseDrives && context!!.networkManager.repository.hasConnections()) {
+                StoragePickerWithDrives(activity as SimpleActivity, currentPath, context!!.config.enableRootAccess) {
+                    getRecyclerAdapter()?.finishActMode()
+                    openPath(it)
+                }
+            } else {
+                StoragePickerDialog(activity as SimpleActivity, currentPath, context!!.config.enableRootAccess, true) {
+                    getRecyclerAdapter()?.finishActMode()
+                    openPath(it)
+                }
             }
         } else {
             val item = binding.breadcrumbs.getItem(id)

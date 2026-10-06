@@ -72,6 +72,13 @@ import org.fossify.filemanager.fragments.StorageFragment
 import org.fossify.filemanager.helpers.MAX_COLUMN_COUNT
 import org.fossify.filemanager.helpers.RootHelpers
 import org.fossify.filemanager.interfaces.ItemOperationsListener
+import org.fossify.filemanager.network.core.RemotePath
+import org.fossify.filemanager.network.core.TransferResult
+import org.fossify.filemanager.network.data.networkManager
+import org.fossify.filemanager.network.transfer.TransferEvents
+import org.fossify.filemanager.network.transfer.TransferRequest
+import org.fossify.filemanager.network.ui.NetworkActions
+import org.fossify.filemanager.network.ui.NetworkErrors
 import java.io.File
 
 class MainActivity : SimpleActivity() {
@@ -80,6 +87,7 @@ class MainActivity : SimpleActivity() {
     companion object {
         private const val BACK_PRESS_TIMEOUT = 5000
         private const val PICKED_PATH = "picked_path"
+        private const val REMOTE_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000L
     }
 
     private val binding by viewBinding(ActivityMainBinding::inflate)
@@ -91,6 +99,8 @@ class MainActivity : SimpleActivity() {
     private var mStoredDateFormat = ""
     private var mStoredTimeFormat = ""
     private var mStoredShowTabs = 0
+
+    private val transferListener = TransferEvents.Listener { _, result -> onTransferFinished(result) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,10 +130,21 @@ class MainActivity : SimpleActivity() {
             checkIfRootAvailable()
             checkInvalidFavorites()
         }
+
+        purgeOldRemoteCache()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        if (intent.action == NetworkActions.ACTION_OPEN_DRIVE) {
+            openDriveFromIntent(intent)
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        TransferEvents.register(transferListener)
         if (mStoredShowTabs != config.showTabs) {
             config.lastUsedViewPagerPage = 0
             System.exit(0)
@@ -157,6 +178,7 @@ class MainActivity : SimpleActivity() {
 
     override fun onPause() {
         super.onPause()
+        TransferEvents.unregister(transferListener)
         storeStateVariables()
         config.lastUsedViewPagerPage = binding.mainViewPager.currentItem
     }
@@ -168,7 +190,13 @@ class MainActivity : SimpleActivity() {
             return true
         } else if (currentFragment is RecentsFragment || currentFragment is StorageFragment) {
             return false
-        } else if ((currentFragment as ItemsFragment).getBreadcrumbs().getItemCount() <= 1) {
+        } else if ((currentFragment as ItemsFragment).isRemote()) {
+            // inside a network drive back goes up; at the top of the drive it returns to the phone
+            if (!currentFragment.goUpRemote()) {
+                openPath(config.homeFolder)
+            }
+            return true
+        } else if (currentFragment.getBreadcrumbs().getItemCount() <= 1) {
             if (!wasBackJustPressed && config.pressBackTwice) {
                 wasBackJustPressed = true
                 toast(R.string.press_back_again)
@@ -198,13 +226,15 @@ class MainActivity : SimpleActivity() {
             findItem(R.id.sort).isVisible = currentFragment is ItemsFragment
             findItem(R.id.change_view_type).isVisible = currentFragment !is StorageFragment
 
-            findItem(R.id.add_favorite).isVisible = currentFragment is ItemsFragment && !favorites.contains(currentFragment.currentPath)
-            findItem(R.id.remove_favorite).isVisible = currentFragment is ItemsFragment && favorites.contains(currentFragment.currentPath)
+            val isRemote = currentFragment is ItemsFragment && currentFragment.isRemote()
+            findItem(R.id.add_favorite).isVisible = currentFragment is ItemsFragment && !isRemote && !favorites.contains(currentFragment.currentPath)
+            findItem(R.id.remove_favorite).isVisible = currentFragment is ItemsFragment && !isRemote && favorites.contains(currentFragment.currentPath)
             findItem(R.id.go_to_favorite).isVisible = currentFragment is ItemsFragment && favorites.isNotEmpty()
 
             findItem(R.id.toggle_filename).isVisible = currentViewType == VIEW_TYPE_GRID && currentFragment !is StorageFragment
             findItem(R.id.go_home).isVisible = currentFragment is ItemsFragment && currentFragment.currentPath != config.homeFolder
-            findItem(R.id.set_as_home).isVisible = currentFragment is ItemsFragment && currentFragment.currentPath != config.homeFolder
+            findItem(R.id.set_as_home).isVisible = currentFragment is ItemsFragment && !isRemote && currentFragment.currentPath != config.homeFolder
+            findItem(R.id.network_drives).isVisible = !isCreateDocumentIntent && !isFilePickerMode()
 
             findItem(R.id.temporarily_show_hidden).isVisible = !config.shouldShowHidden() && currentFragment !is StorageFragment
             findItem(R.id.stop_showing_hidden).isVisible = config.temporarilyShowHidden && currentFragment !is StorageFragment
@@ -251,6 +281,7 @@ class MainActivity : SimpleActivity() {
                     R.id.stop_showing_hidden -> tryToggleTemporarilyShowHidden()
                     R.id.column_count -> changeColumnCount()
                     R.id.more_apps_from_us -> launchMoreAppsFromUsIntent()
+                    R.id.network_drives -> startActivity(Intent(applicationContext, NetworkDrivesActivity::class.java))
                     R.id.settings -> launchSettings()
                     R.id.about -> launchAbout()
                     else -> return@setOnMenuItemClickListener false
@@ -329,6 +360,9 @@ class MainActivity : SimpleActivity() {
             }
 
             binding.mainViewPager.currentItem = 0
+        } else if (intent.action == NetworkActions.ACTION_OPEN_DRIVE) {
+            openPath(config.homeFolder)
+            openDriveFromIntent(intent)
         } else {
             openPath(config.homeFolder)
         }
@@ -459,7 +493,9 @@ class MainActivity : SimpleActivity() {
     private fun openPath(path: String, forceRefresh: Boolean = false) {
         var newPath = path
         val file = File(path)
-        if (config.OTGPath.isNotEmpty() && config.OTGPath == path.trimEnd('/')) {
+        if (RemotePath.isRemote(path)) {
+            newPath = path
+        } else if (config.OTGPath.isNotEmpty() && config.OTGPath == path.trimEnd('/')) {
             newPath = path
         } else if (file.exists() && !file.isDirectory) {
             newPath = file.parent
@@ -602,6 +638,50 @@ class MainActivity : SimpleActivity() {
                     config.enableRootAccess = it
                 }
             }
+        }
+    }
+
+    private fun isFilePickerMode(): Boolean {
+        val action = intent.action
+        return action == RingtoneManager.ACTION_RINGTONE_PICKER ||
+            action == Intent.ACTION_GET_CONTENT ||
+            action == Intent.ACTION_PICK
+    }
+
+    /** Opens the network drive named in [intent] in the file list. */
+    private fun openDriveFromIntent(intent: Intent) {
+        val connectionId = intent.getStringExtra(NetworkActions.EXTRA_CONNECTION_ID) ?: return
+        val drive = networkManager.repository.get(connectionId)
+        if (drive == null) {
+            toast(R.string.drive_not_saved)
+            return
+        }
+
+        toast(getString(R.string.drive_connecting_to, drive.name))
+        ensureBackgroundThread {
+            try {
+                val start = networkManager.files.initialPath(connectionId)
+                runOnUiThread {
+                    getItemsFragment()?.openPath(start)
+                    binding.mainViewPager.currentItem = 0
+                }
+            } catch (e: Exception) {
+                NetworkErrors.handle(this, connectionId, e) { openDriveFromIntent(intent) }
+            }
+        }
+    }
+
+    private fun onTransferFinished(result: TransferResult) {
+        getItemsFragment()?.refreshFragment()
+        when {
+            result.failures.isNotEmpty() -> toast(NetworkErrors.describe(this, result.failures.first().error), android.widget.Toast.LENGTH_LONG)
+            !result.cancelled -> toast(R.string.transfer_done_title)
+        }
+    }
+
+    private fun purgeOldRemoteCache() {
+        ensureBackgroundThread {
+            networkManager.files.cache.purgeOlderThan(REMOTE_CACHE_MAX_AGE_MS)
         }
     }
 

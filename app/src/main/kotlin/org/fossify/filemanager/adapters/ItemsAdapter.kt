@@ -113,6 +113,9 @@ import org.fossify.filemanager.helpers.OPEN_AS_VIDEO
 import org.fossify.filemanager.helpers.RootHelpers
 import org.fossify.filemanager.interfaces.ItemOperationsListener
 import org.fossify.filemanager.models.ListItem
+import org.fossify.filemanager.network.core.RemotePath
+import org.fossify.filemanager.network.ui.DestinationPicker
+import org.fossify.filemanager.network.ui.RemoteActions
 import java.io.BufferedInputStream
 import java.io.Closeable
 import java.io.File
@@ -171,19 +174,29 @@ class ItemsAdapter(
     override fun getActionMenuId() = R.menu.cab
 
     override fun prepareActionMode(menu: Menu) {
+        // items on network drives support only a part of the actions
+        val remote = isRemoteSelection()
         menu.apply {
             findItem(R.id.cab_decompress).isVisible =
-                getSelectedFileDirItems().map { it.path }.any { it.isZipFile() }
+                !remote && getSelectedFileDirItems().map { it.path }.any { it.isZipFile() }
             findItem(R.id.cab_confirm_selection).isVisible = isPickMultipleIntent
             findItem(R.id.cab_copy_path).isVisible = isOneItemSelected()
             findItem(R.id.cab_open_with).isVisible = isOneFileSelected()
             findItem(R.id.cab_open_as).isVisible = isOneFileSelected()
-            findItem(R.id.cab_set_as).isVisible = isOneFileSelected()
-            findItem(R.id.cab_create_shortcut).isVisible = isOneItemSelected()
+            findItem(R.id.cab_set_as).isVisible = !remote && isOneFileSelected()
+            findItem(R.id.cab_create_shortcut).isVisible = !remote && isOneItemSelected()
+            findItem(R.id.cab_compress).isVisible = !remote
+            findItem(R.id.cab_rename).isVisible = !remote || isOneItemSelected()
 
             checkHideBtnVisibility(this)
+            if (remote) {
+                findItem(R.id.cab_hide).isVisible = false
+                findItem(R.id.cab_unhide).isVisible = false
+            }
         }
     }
+
+    private fun isRemoteSelection() = selectedKeys.isNotEmpty() && RemotePath.isRemote(getFirstSelectedItemPath())
 
     override fun actionItemPressed(id: Int) {
         if (selectedKeys.isEmpty()) {
@@ -311,6 +324,15 @@ class ItemsAdapter(
         val fileDirItems = getSelectedFileDirItems()
         val paths = fileDirItems.asSequence().map { it.path }.toMutableList() as ArrayList<String>
         when {
+            paths.size == 1 && RemotePath.isRemote(paths.first()) -> {
+                RemoteActions.rename(activity, paths.first()) {
+                    activity.runOnUiThread {
+                        listener?.refreshFragment()
+                        finishActMode()
+                    }
+                }
+            }
+
             paths.size == 1 -> {
                 val oldPath = paths.first()
                 RenameItemDialog(activity, oldPath) {
@@ -339,7 +361,9 @@ class ItemsAdapter(
     }
 
     private fun showProperties() {
-        if (selectedKeys.size <= 1) {
+        if (isRemoteSelection()) {
+            RemoteActions.properties(activity, getSelectedFileDirItems())
+        } else if (selectedKeys.size <= 1) {
             PropertiesDialog(activity, getFirstSelectedItemPath(), config.shouldShowHidden())
         } else {
             val paths = getSelectedFileDirItems().map { it.path }
@@ -349,6 +373,11 @@ class ItemsAdapter(
 
     private fun shareFiles() {
         val selectedItems = getSelectedFileDirItems()
+        if (RemotePath.isRemote(selectedItems.first().path)) {
+            RemoteActions.share(activity, selectedItems)
+            return
+        }
+
         val paths = ArrayList<String>(selectedItems.size)
         selectedItems.forEach {
             addFileUris(it.path, paths)
@@ -473,7 +502,11 @@ class ItemsAdapter(
     }
 
     private fun copyPath() {
-        activity.copyToClipboard(getFirstSelectedItemPath())
+        if (isRemoteSelection()) {
+            RemoteActions.copyPath(activity, getFirstSelectedItemPath())
+        } else {
+            activity.copyToClipboard(getFirstSelectedItemPath())
+        }
         finishActMode()
     }
 
@@ -510,15 +543,43 @@ class ItemsAdapter(
         val files = getSelectedFileDirItems()
         val firstFile = files[0]
         val source = firstFile.getParentPath()
-        FilePickerDialog(
-            activity = activity,
-            currPath = activity.getDefaultCopyDestinationPath(config.shouldShowHidden(), source),
-            pickFile = false,
-            showHidden = config.shouldShowHidden(),
-            showFAB = true,
-            canAddShowHiddenButton = true,
-            showFavoritesButton = true
-        ) {
+
+        val showDevicePicker: (onPicked: (String) -> Unit) -> Unit = { onPicked ->
+            FilePickerDialog(
+                activity = activity,
+                currPath = activity.getDefaultCopyDestinationPath(config.shouldShowHidden(), source),
+                pickFile = false,
+                showHidden = config.shouldShowHidden(),
+                showFAB = true,
+                canAddShowHiddenButton = true,
+                showFavoritesButton = true
+            ) { onPicked(it) }
+        }
+
+        if (DestinationPicker.isNeeded(activity, files)) {
+            // network drives are involved: choose between the phone and a drive first
+            DestinationPicker.pick(activity, showDevicePicker) { destination ->
+                if (RemotePath.isRemote(destination) || RemotePath.isRemote(firstFile.path)) {
+                    RemoteActions.copyMove(activity, files, destination, isCopyOperation, config.keepLastModified) {
+                        finishActMode()
+                    }
+                } else {
+                    copyMoveLocally(files, firstFile, source, destination, isCopyOperation)
+                }
+            }
+        } else {
+            showDevicePicker { copyMoveLocally(files, firstFile, source, it, isCopyOperation) }
+        }
+    }
+
+    private fun copyMoveLocally(
+        files: ArrayList<FileDirItem>,
+        firstFile: FileDirItem,
+        source: String,
+        destination: String,
+        isCopyOperation: Boolean,
+    ) {
+        destination.let {
             config.lastCopyPath = it
             if (activity.isPathOnRoot(it) || activity.isPathOnRoot(firstFile.path)) {
                 copyMoveRootItems(files, it, isCopyOperation)
@@ -1077,9 +1138,11 @@ class ItemsAdapter(
                     itemName?.beVisible()
                 }
 
+                val isRemoteItem = RemotePath.isRemote(listItem.path)
                 if (listItem.isDirectory) {
                     itemIcon?.setImageDrawable(folderDrawable)
-                    itemDetails?.text = getChildrenCnt(listItem)
+                    // counting the children of every folder would need a network round trip per folder
+                    itemDetails?.text = if (isRemoteItem) "" else getChildrenCnt(listItem)
                     itemDate?.beGone()
                 } else {
                     itemDetails?.text = listItem.size.formatSize()
@@ -1096,13 +1159,18 @@ class ItemsAdapter(
                         .error(drawable)
                         .transform(CenterCrop(), RoundedCorners(10))
 
-                    val itemToLoad = getImagePathToLoad(listItem.path)
-                    if (!activity.isDestroyed && itemIcon != null) {
-                        Glide.with(activity)
-                            .load(itemToLoad)
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .apply(options)
-                            .into(itemIcon!!)
+                    if (isRemoteItem) {
+                        // no thumbnails for files on network drives, they would have to be downloaded
+                        itemIcon?.setImageDrawable(drawable)
+                    } else {
+                        val itemToLoad = getImagePathToLoad(listItem.path)
+                        if (!activity.isDestroyed && itemIcon != null) {
+                            Glide.with(activity)
+                                .load(itemToLoad)
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .apply(options)
+                                .into(itemIcon!!)
+                        }
                     }
                 }
             }

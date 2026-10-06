@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/network_drive_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/min_row_height"
+    android:paddingStart="@dimen/activity_margin"
+    android:paddingEnd="0dp">
+
+    <ImageView
+        android:id="@+id/network_drive_icon"
+        android:layout_width="@dimen/normal_icon_size"
+        android:layout_height="@dimen/normal_icon_size"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_network_drive_vector" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_toStartOf="@+id/overflow_menu_icon"
+        android:layout_toEndOf="@+id/network_drive_icon"
+        android:orientation="vertical">
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/network_drive_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="@dimen/bigger_text_size"
+            tools:text="Home NAS" />
+
+        <org.fossify.commons.views.MyTextView
+            android:id="@+id/network_drive_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="smb://192.168.1.10/Public" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/overflow_menu_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@null"
+        android:padding="@dimen/activity_margin"
+        android:src="@drawable/ic_three_dots_vector" />
+
+    <View
+        android:id="@+id/overflow_menu_anchor"
+        style="@style/OverflowMenuAnchorStyle"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>
