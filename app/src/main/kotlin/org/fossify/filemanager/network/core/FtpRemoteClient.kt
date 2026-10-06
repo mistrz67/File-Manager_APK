@@ -36,9 +36,6 @@ class FtpRemoteClient(
     @Volatile
     private var broken = false
 
-    @Volatile
-    private var lastUsed = System.currentTimeMillis()
-
     override val isConnected: Boolean get() = !broken && ftp?.isConnected == true
 
     override fun connect() {
@@ -62,7 +59,6 @@ class FtpRemoteClient(
                 throw mapConnectException(e)
             }
         }
-        lastUsed = System.currentTimeMillis()
     }
 
     private fun connectOnce(pinned: PinnedIdentity?, protocols: List<String>) {
@@ -81,7 +77,7 @@ class FtpRemoteClient(
         login(client)
         client.setFileType(FTP.BINARY_FILE_TYPE)
         if (connection.ftpPassive) client.enterLocalPassiveMode() else client.enterLocalActiveMode()
-        supportsMlsd = runCatching { client.hasFeature(FTPCmd.MLST) }.getOrDefault(false)
+        supportsMlsd = options.ftpUseMlsd && runCatching { client.hasFeature(FTPCmd.MLST) }.getOrDefault(false)
     }
 
     private fun isProtocolMismatch(e: Throwable): Boolean = generateSequence(e) { it.cause }.any {
@@ -141,10 +137,10 @@ class FtpRemoteClient(
     override fun isHealthy(): Boolean {
         val client = ftp ?: return false
         if (!isConnected) return false
-        if (System.currentTimeMillis() - lastUsed < HEALTH_CHECK_AFTER_MS) return true
         return try {
             client.sendNoOp()
         } catch (e: IOException) {
+            broken = true
             false
         }
     }
@@ -162,7 +158,7 @@ class FtpRemoteClient(
             val entries = files.filterNotNull()
                 .filter { it.name != null && it.name != "." && it.name != ".." && it.type != FTPFile.UNKNOWN_TYPE }
                 .map { toEntry(client, normalized, it) }
-            if (entries.isEmpty() && !client.changeWorkingDirectory(normalized)) {
+            if (entries.isEmpty() && !isDirectory(client, normalized)) {
                 // some servers (vsftpd) answer "226 OK" with an empty listing for folders that do not exist
                 throw RemoteNotFoundException(normalized)
             }
@@ -194,8 +190,7 @@ class FtpRemoteClient(
         var isDirectory = file.isDirectory
         val isSymlink = file.isSymbolicLink
         if (isSymlink) {
-            // learn whether the link points to a folder; the working directory is not relied upon elsewhere
-            isDirectory = client.changeWorkingDirectory(path)
+            isDirectory = isDirectory(client, path)
         }
 
         return RemoteEntry(
@@ -206,6 +201,16 @@ class FtpRemoteClient(
             modified = file.timestampInstant?.toEpochMilli() ?: 0L,
             isSymlink = isSymlink,
         )
+    }
+
+    /**
+     * Whether [path] is a folder, found out by entering it. The working directory is not relied upon anywhere else,
+     * and some servers refuse to delete the folder a session is in, so go back to the root afterwards.
+     */
+    private fun isDirectory(client: FTPClient, path: String): Boolean {
+        val isDirectory = client.changeWorkingDirectory(path)
+        if (isDirectory) client.changeWorkingDirectory("/")
+        return isDirectory
     }
 
     override fun stat(path: String): RemoteEntry? {
@@ -285,7 +290,6 @@ class FtpRemoteClient(
             false
         }
 
-        lastUsed = System.currentTimeMillis()
         if (!ok) {
             broken = true
             if (failOnError) throw RemoteException("Transfer failed: ${client.replyString.trim()}")
@@ -372,8 +376,6 @@ class FtpRemoteClient(
         } catch (e: IOException) {
             if (e !is RemoteException) broken = true
             throw mapIoException(e)
-        } finally {
-            lastUsed = System.currentTimeMillis()
         }
     }
 
@@ -390,6 +392,13 @@ class FtpRemoteClient(
                 "not empty" in lower -> RemoteNotEmptyException(path)
                 // servers answer 550 for both missing files and permission problems; tell them apart
                 else -> if (existsQuietly(path)) RemoteAccessDeniedException(path) else RemoteNotFoundException(path)
+            }
+
+            FTPReply.FILE_ACTION_NOT_TAKEN -> when {
+                "non-existing" in lower || "not found" in lower || "no such" in lower || "not exist" in lower ->
+                    RemoteNotFoundException(path)
+
+                else -> if (existsQuietly(path)) RemoteException(reply) else RemoteNotFoundException(path)
             }
 
             FTPReply.STORAGE_ALLOCATION_EXCEEDED, FTPReply.FILE_NAME_NOT_ALLOWED -> RemoteAccessDeniedException(path)
@@ -428,7 +437,6 @@ class FtpRemoteClient(
 
     private companion object {
         const val KEEP_ALIVE_SECONDS = 60L
-        const val HEALTH_CHECK_AFTER_MS = 5_000L
         val MFMT_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZoneOffset.UTC)
     }
 }

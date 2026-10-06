@@ -77,8 +77,8 @@ class LocalFileSystem : FileSystem {
 
     private fun mapException(path: String, e: IOException): IOException {
         return when {
-            !File(path).exists() && File(path).parentFile?.exists() == false -> RemoteNotFoundException(path, e)
             e.message?.contains("Permission denied", ignoreCase = true) == true -> RemoteAccessDeniedException(path, e)
+            !File(path).exists() -> RemoteNotFoundException(path, e)
             else -> e
         }
     }

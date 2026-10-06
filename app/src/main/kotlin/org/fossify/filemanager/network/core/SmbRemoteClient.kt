@@ -86,7 +86,15 @@ class SmbRemoteClient(
         return if (configured.isEmpty()) "/" else Paths.normalize(configured)
     }
 
-    override fun isHealthy(): Boolean = isConnected
+    override fun isHealthy(): Boolean {
+        if (!isConnected) return false
+        return try {
+            shares.values.firstOrNull()?.folderExists("")
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 
     // region listing
 

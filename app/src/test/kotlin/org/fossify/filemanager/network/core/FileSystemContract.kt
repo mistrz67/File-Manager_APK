@@ -28,6 +28,16 @@ abstract class FileSystemContract {
 
     protected open val supportsSetModified = true
 
+    /** False when the environment cannot store non-ASCII names (e.g. a JVM running with a POSIX locale). */
+    protected open val supportsUnicodeNames = true
+
+    /** False for servers that hide dot files from listings (Apache FtpServer does with MLSD). */
+    protected open val listsHiddenFiles = true
+
+    /** For test servers backed by this JVM's own file system. */
+    protected val jvmHandlesUnicodeFileNames: Boolean
+        get() = System.getProperty("sun.jnu.encoding")?.contains("UTF", ignoreCase = true) == true
+
     /** Characters the file system cannot store in names (SMB forbids `*` and `?`). */
     protected open val forbiddenNameChars = ""
 
@@ -165,7 +175,10 @@ abstract class FileSystemContract {
             "apostrophe's.txt",
             "back\\slash.txt".takeIf { allowsBackslashInNames },
             ".hidden",
-        ).filterNotNull().filter { name -> name.none { it in forbiddenNameChars } }
+        ).filterNotNull()
+            .filter { name -> name.none { it in forbiddenNameChars } }
+            .filter { name -> supportsUnicodeNames || name.all { it.code < 128 } }
+            .filter { name -> listsHiddenFiles || !name.startsWith(".") }
 
         names.forEach { write(Paths.join(dir, it), it.toByteArray()) }
         val listed = fs.list(dir).map { it.name }.toSet()

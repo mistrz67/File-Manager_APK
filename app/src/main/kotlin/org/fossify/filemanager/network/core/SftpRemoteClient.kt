@@ -106,6 +106,17 @@ class SftpRemoteClient(
         }
     }
 
+    override fun isHealthy(): Boolean {
+        val sftp = channel ?: return false
+        if (!isConnected) return false
+        return try {
+            sftp.realpath("/")
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
     // region listing
 
     override fun list(path: String): List<RemoteEntry> {

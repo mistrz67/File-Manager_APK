@@ -75,4 +75,6 @@ data class ClientOptions(
      * many FTPS servers require, is reliable there but not with every TLS 1.3 stack.
      */
     val ftpsProtocols: List<String> = listOf("TLSv1.2"),
+    /** FTP: prefer MLSD over LIST when the server supports it. */
+    val ftpUseMlsd: Boolean = true,
 )
