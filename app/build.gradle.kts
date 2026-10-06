@@ -145,5 +145,22 @@ dependencies {
     implementation(libs.gestureviews)
     implementation(libs.autofittextview)
     implementation(libs.zip4j)
+
+    // Network drives (SMB, SFTP, FTP/FTPS)
+    implementation(libs.smbj)
+    implementation(libs.dcerpc) {
+        // dcerpc pulls the JRE flavour of Guava; use the Android flavour instead
+        exclude(group = "com.google.guava", module = "guava")
+    }
+    implementation(libs.guava.android)
+    implementation(libs.jsch)
+    implementation(libs.commons.net)
+    runtimeOnly(libs.slf4j.nop)
+
     detektPlugins(libs.compose.detekt)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.sshd.sftp)
+    testImplementation(libs.ftpserver.core)
+    testRuntimeOnly(libs.slf4j.nop)
 }

@@ -15,6 +15,17 @@ gestureviews = "2.9.0"
 rootshell = "bc7e5d398e"
 roottools = "965c154e20"
 zip4j = "2.11.6"
+#Network drives
+smbj = "0.15.0"
+dcerpc = "0.12.13"
+jsch = "2.28.7"
+commonsNet = "3.13.0"
+guava = "33.4.0-android"
+slf4j = "2.0.17"
+#Test
+junit = "4.13.2"
+sshd = "2.15.0"
+ftpserver = "1.2.1"
 #Gradle
 gradlePlugins-agp = "9.4.1"
 #build
@@ -37,6 +48,17 @@ gestureviews = { module = "com.alexvasilkov:gesture-views", version.ref = "gestu
 rootshell = { module = "com.github.naveensingh:RootShell", version.ref = "rootshell" }
 roottools = { module = "com.github.naveensingh:RootTools", version.ref = "roottools" }
 zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4j" }
+#Network drives
+smbj = { module = "com.hierynomus:smbj", version.ref = "smbj" }
+dcerpc = { module = "com.rapid7.client:dcerpc", version.ref = "dcerpc" }
+jsch = { module = "com.github.mwiede:jsch", version.ref = "jsch" }
+commons-net = { module = "commons-net:commons-net", version.ref = "commonsNet" }
+guava-android = { module = "com.google.guava:guava", version.ref = "guava" }
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
+#Test
+junit = { module = "junit:junit", version.ref = "junit" }
+sshd-sftp = { module = "org.apache.sshd:sshd-sftp", version.ref = "sshd" }
+ftpserver-core = { module = "org.apache.ftpserver:ftpserver-core", version.ref = "ftpserver" }
 [plugins]
 android = { id = "com.android.application", version.ref = "gradlePlugins-agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
