@@ -66,6 +66,12 @@ class TransferService : Service() {
         return START_NOT_STICKY
     }
 
+    /** Android 15+ limits data sync services to a few hours a day; stop cleanly instead of being killed. */
+    override fun onTimeout(startId: Int, fgsType: Int) {
+        TransferQueue.clear()
+        currentToken?.cancel()
+    }
+
     override fun onDestroy() {
         releaseLocks()
         executor.shutdownNow()
